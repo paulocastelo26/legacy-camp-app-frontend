@@ -280,7 +280,7 @@
 
 @media (max-width: 480px) {
   .info-section, .cta-section {
-    padding: 60px 0;
+    padding: 10px 0;
   }
   .container {
     padding: 0 15px;
