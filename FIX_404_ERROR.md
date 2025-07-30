@@ -32,6 +32,11 @@ ID: gru1::nr8st-1753841532515-1efb7864cf51
 - Vercel procurava: `dist/acampamento-frontend/`
 - **Solução:** Atualizar `distDir` para incluir `/browser`
 
+### **5. MIME Types ES6 Modules** ⚠️ **NOVO**
+- Angular 19 usa ES6 modules (`type="module"`)
+- Vercel serve JS como `text/html` em vez de `application/javascript`
+- **Solução:** Configurar headers corretos no `vercel.json`
+
 ---
 
 ## 🛠️ **Soluções**
@@ -76,7 +81,7 @@ npm run build --verbose
 
 ## 🔧 **Configurações Atualizadas**
 
-### **1. vercel.json (Corrigido - Angular 19)**
+### **1. vercel.json (Corrigido - Angular 19 + MIME Types)**
 ```json
 {
   "version": 2,
@@ -89,6 +94,26 @@ npm run build --verbose
         "distDir": "dist/acampamento-frontend/browser",
         "buildCommand": "npm run build"
       }
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*\\.js)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.css)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/css"
+        }
+      ]
     }
   ],
   "routes": [
