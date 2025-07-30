@@ -27,6 +27,11 @@ ID: gru1::nr8st-1753841532515-1efb7864cf51
 - Output directory errado
 - Variáveis de ambiente
 
+### **4. Estrutura Angular 19** ⚠️ **NOVO**
+- Angular 19 gera: `dist/acampamento-frontend/browser/`
+- Vercel procurava: `dist/acampamento-frontend/`
+- **Solução:** Atualizar `distDir` para incluir `/browser`
+
 ---
 
 ## 🛠️ **Soluções**
@@ -71,7 +76,7 @@ npm run build --verbose
 
 ## 🔧 **Configurações Atualizadas**
 
-### **1. vercel.json (Corrigido)**
+### **1. vercel.json (Corrigido - Angular 19)**
 ```json
 {
   "version": 2,
@@ -81,7 +86,7 @@ npm run build --verbose
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist/acampamento-frontend",
+        "distDir": "dist/acampamento-frontend/browser",
         "buildCommand": "npm run build"
       }
     }

@@ -26,9 +26,13 @@ echo.
 echo ✅ Build concluído!
 echo.
 echo 📁 Verificando arquivos gerados...
-if exist dist\acampamento-frontend (
+if exist dist\acampamento-frontend\browser (
     echo ✅ Diretório dist criado com sucesso
+    echo 📂 Estrutura Angular 19:
     dir dist\acampamento-frontend
+    echo.
+    echo 📂 Conteúdo browser:
+    dir dist\acampamento-frontend\browser
 ) else (
     echo ❌ Erro: Diretório dist não foi criado
 )
