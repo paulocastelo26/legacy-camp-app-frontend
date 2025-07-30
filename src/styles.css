@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Permanent+Marker&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  padding: 0;
+  background:linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('assets/legacy-camp-banner.png') center center / cover no-repeat fixed;
+  color: #FFF;
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+* {
+  box-sizing: border-box;
+} 

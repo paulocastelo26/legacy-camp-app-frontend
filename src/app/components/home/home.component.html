@@ -1,0 +1,95 @@
+<div class="home-container">
+  <main class="main-content">
+    <section class="testimonials-section">
+      <div class="logo-wrapper">
+        <img src="../../../assets/logo.png" alt="" style="width: 100%" />
+
+        <section class="cta-section">
+          <div class="container">
+            <h3>Não perca essa oportunidade!</h3>
+            <p>Garanta sua vaga e participe de um fim de semana inesquecível</p>
+
+            <div>
+              <div class="button">
+                <a href="javascript:void(0)" (click)="buyTicket()">Adquira aqui!</a>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+      <div class="container">
+        <h2 class="testimonials-title">Depoimentos de quem já participou</h2>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              “Foi um final de semana que mudou minha vida! Fiz amizades
+              incríveis e cresci muito espiritualmente.”
+            </p>
+            <span class="testimonial-author">— Ana Paula, Manaus/Am</span>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              “O Legacy Camp é uma experiência única, cheia de diversão,
+              aprendizado e presença de Deus!”
+            </p>
+            <span class="testimonial-author">— Lucas Silva, Manaus/Am</span>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              “Recomendo para todo jovem! Ambiente seguro, acolhedor e com muita
+              energia positiva.”
+            </p>
+            <span class="testimonial-author">— Beatriz Souza, Manaus/Am</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gallery-section">
+      <div class="container">
+        <h2 class="gallery-title">Momentos do último evento</h2>
+        <div class="gallery-carousel">
+          <button
+            class="gallery-arrow left"
+            (click)="prevImage()"
+            aria-label="Imagem anterior"
+          >
+            <span class="material-icons">chevron_left</span>
+          </button>
+          <div
+            class="gallery-image-wrapper gallery-multi-image-wrapper"
+            (mouseenter)="pauseAutoplay()"
+            (mouseleave)="resumeAutoplay()"
+          >
+            <img
+              *ngFor="let img of getVisibleImages(); let idx = index"
+              [src]="img"
+              alt="Foto do evento"
+              class="gallery-image gallery-multi-image"
+              [class.gallery-image-center]="idx === 1"
+            />
+          </div>
+          <button
+            class="gallery-arrow right"
+            (click)="nextImage()"
+            aria-label="Próxima imagem"
+          >
+            <span class="material-icons">chevron_right</span>
+          </button>
+        </div>
+        <div class="gallery-dots">
+          <button
+            *ngFor="let img of galleryImages; let i = index"
+            class="gallery-dot"
+            [class.active]="i === currentImage"
+            (click)="goToImage(i)"
+            [attr.aria-label]="'Ir para imagem ' + (i + 1)"
+          ></button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="footer">Evento Lagoinha Manaus</footer>

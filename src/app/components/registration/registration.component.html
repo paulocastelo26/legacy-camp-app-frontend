@@ -1,0 +1,632 @@
+<div class="registration-container">
+  <div class="registration-card">
+    <header class="form-header">
+      <button class="back-button" (click)="goBack()">
+        <span>←</span> Voltar
+      </button>
+      <h1>Inscrição - Legacy Camp 2025</h1>
+      <p>Preencha seus dados para garantir sua vaga</p>
+    </header>
+
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
+      
+      <!-- 👤 Informações Pessoais -->
+      <section class="form-section">
+        <h2>👤 Informações Pessoais</h2>
+        
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="fullName">Nome completo *</label>
+            <input 
+              type="text" 
+              id="fullName" 
+              formControlName="fullName"
+              placeholder="Digite seu nome completo"
+              [class.error]="submitted && f['fullName'].errors"
+            >
+            <div class="error-message" *ngIf="submitted && f['fullName'].errors">
+              <span *ngIf="f['fullName'].errors['required']">Nome é obrigatório</span>
+              <span *ngIf="f['fullName'].errors['minlength']">Nome deve ter pelo menos 3 caracteres</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="birthDate">Data de nascimento *</label>
+            <input 
+              type="date" 
+              id="birthDate" 
+              formControlName="birthDate"
+              (change)="calculateAge()"
+              [class.error]="submitted && f['birthDate'].errors"
+            >
+            <div class="error-message" *ngIf="submitted && f['birthDate'].errors">
+              <span *ngIf="f['birthDate'].errors['required']">Data de nascimento é obrigatória</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="age">Idade *</label>
+            <input 
+              type="number" 
+              id="age" 
+              formControlName="age"
+              readonly
+              [class.error]="submitted && f['age'].errors"
+            >
+            <div class="error-message" *ngIf="submitted && f['age'].errors">
+              <span *ngIf="f['age'].errors['required']">Idade é obrigatória</span>
+              <span *ngIf="f['age'].errors['min']">Idade mínima é 12 anos</span>
+              <span *ngIf="f['age'].errors['max']">Idade máxima é 100 anos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Gênero *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="gender" value="masculino">
+                <span class="radio-custom"></span>
+                Masculino
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="gender" value="feminino">
+                <span class="radio-custom"></span>
+                Feminino
+              </label>
+            </div>
+            <div class="error-message" *ngIf="submitted && f['gender'].errors">
+              <span *ngIf="f['gender'].errors['required']">Gênero é obrigatório</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Telefone (WhatsApp) *</label>
+            <input 
+              type="tel" 
+              id="phone" 
+              formControlName="phone"
+              placeholder="(11) 99999-9999"
+              (input)="formatPhone($event)"
+              [class.error]="submitted && f['phone'].errors"
+            >
+            <div class="error-message" *ngIf="submitted && f['phone'].errors">
+              <span *ngIf="f['phone'].errors['required']">Telefone é obrigatório</span>
+              <span *ngIf="f['phone'].errors['pattern']">Digite um telefone válido</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-mail *</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email"
+              placeholder="seu@email.com"
+              [class.error]="submitted && f['email'].errors"
+            >
+            <div class="error-message" *ngIf="submitted && f['email'].errors">
+              <span *ngIf="f['email'].errors['required']">E-mail é obrigatório</span>
+              <span *ngIf="f['email'].errors['email']">Digite um e-mail válido</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="address">Endereço completo *</label>
+            <textarea 
+              id="address" 
+              formControlName="address"
+              placeholder="Rua, bairro, cidade, CEP"
+              rows="3"
+              [class.error]="submitted && f['address'].errors"
+            ></textarea>
+            <div class="error-message" *ngIf="submitted && f['address'].errors">
+              <span *ngIf="f['address'].errors['required']">Endereço é obrigatório</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="socialMedia">Rede Social *</label>
+            <input 
+              type="text" 
+              id="socialMedia" 
+              formControlName="socialMedia"
+              placeholder="Instagram e Facebook"
+              [class.error]="submitted && f['socialMedia'].errors"
+            >
+            <div class="error-message" *ngIf="submitted && f['socialMedia'].errors">
+              <span *ngIf="f['socialMedia'].errors['required']">Rede social é obrigatória</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contato de Emergência -->
+        <div class="form-subsection">
+          <h3>Contato de emergência</h3>
+          <div formGroupName="emergencyContact">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="emergencyName">Nome *</label>
+                <input 
+                  type="text" 
+                  id="emergencyName" 
+                  formControlName="name"
+                  placeholder="Nome do contato"
+                  [class.error]="submitted && emergencyContact.get('name')?.errors"
+                >
+                <div class="error-message" *ngIf="submitted && emergencyContact.get('name')?.errors">
+                  <span *ngIf="emergencyContact.get('name')?.errors?.['required']">Nome é obrigatório</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="emergencyPhone">Telefone *</label>
+                <input 
+                  type="tel" 
+                  id="emergencyPhone" 
+                  formControlName="phone"
+                  placeholder="(11) 99999-9999"
+                  (input)="formatEmergencyPhone($event)"
+                  [class.error]="submitted && emergencyContact.get('phone')?.errors"
+                >
+                <div class="error-message" *ngIf="submitted && emergencyContact.get('phone')?.errors">
+                  <span *ngIf="emergencyContact.get('phone')?.errors?.['required']">Telefone é obrigatório</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="emergencyRelationship">Grau de parentesco *</label>
+                <input 
+                  type="text" 
+                  id="emergencyRelationship" 
+                  formControlName="relationship"
+                  placeholder="Ex: Pai, Mãe, Irmão, etc."
+                  [class.error]="submitted && emergencyContact.get('relationship')?.errors"
+                >
+                <div class="error-message" *ngIf="submitted && emergencyContact.get('relationship')?.errors">
+                  <span *ngIf="emergencyContact.get('relationship')?.errors?.['required']">Grau de parentesco é obrigatório</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 🏘️ Informações de Igreja -->
+      <section class="form-section">
+        <h2>🏘️ Informações de Igreja</h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Você é membro de alguma Lagoinha da região Norte? *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="isLagoinhaMember" value="sim">
+                <span class="radio-custom"></span>
+                Sim
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="isLagoinhaMember" value="nao">
+                <span class="radio-custom"></span>
+                Não
+              </label>
+            </div>
+            <div class="error-message" *ngIf="submitted && f['isLagoinhaMember'].errors">
+              <span *ngIf="f['isLagoinhaMember'].errors['required']">Esta informação é obrigatória</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="churchName">Se sim, qual Lagoinha você frequenta? (Cidade e nome da igreja) *</label>
+            <input 
+              type="text" 
+              id="churchName" 
+              formControlName="churchName"
+              placeholder="Ex: Lagoinha Manaus Sede, Lagoinha Manaus Torres, Lagoinha Manaus Japiim, Lagoinha Itacoatiara, etc."
+              [class.error]="submitted && f['churchName'].errors"
+            >
+            <div class="error-message" *ngIf="submitted && f['churchName'].errors">
+              <span *ngIf="f['churchName'].errors['required']">Nome da igreja é obrigatório</span>
+            </div>
+            <small class="form-help">❗ Caso você não seja membro de uma Lagoinha, escreva o nome da sua igreja para a análise da sua inscrição.</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="ministryParticipation">Você participa de algum ministério (voluntário ou líder) e algum GC? Quais? *</label>
+            <textarea 
+              id="ministryParticipation" 
+              formControlName="ministryParticipation"
+              placeholder="Descreva sua participação em ministérios e grupos de células"
+              rows="3"
+              [class.error]="submitted && f['ministryParticipation'].errors"
+            ></textarea>
+            <div class="error-message" *ngIf="submitted && f['ministryParticipation'].errors">
+              <span *ngIf="f['ministryParticipation'].errors['required']">Esta informação é obrigatória</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 💳 Informações da Inscrição -->
+      <section class="form-section">
+        <h2>💳 Informações da Inscrição</h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Selecione o lote da sua inscrição *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="registrationLot" value="lote1">
+                <span class="radio-custom"></span>
+                1º Lote – R$ 250,00 (100% a vista, e LIMITADO)
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="registrationLot" value="lote2">
+                <span class="radio-custom"></span>
+                2º Lote – R$ 300,00 (Podendo ser a vista ou parcelado)
+              </label>
+            </div>
+            <div class="error-message" *ngIf="submitted && f['registrationLot'].errors">
+              <span *ngIf="f['registrationLot'].errors['required']">Selecione um lote</span>
+            </div>
+            <small class="form-help">Ambos os lotes incluem transporte, alimentação e camisa.</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Forma de pagamento utilizada *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="paymentMethod" value="pix">
+                <span class="radio-custom"></span>
+                PIX
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="paymentMethod" value="cartao">
+                <span class="radio-custom"></span>
+                Cartão
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="paymentMethod" value="carne">
+                <span class="radio-custom"></span>
+                Carnê Legacy
+              </label>
+            </div>
+            <div class="error-message" *ngIf="submitted && f['paymentMethod'].errors">
+              <span *ngIf="f['paymentMethod'].errors['required']">Selecione uma forma de pagamento</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="paymentProof">Anexe o comprovante de pagamento</label>
+            <input 
+              type="file" 
+              id="paymentProof" 
+              formControlName="paymentProof"
+              accept="image/*,.pdf"
+            >
+            <small class="form-help">Opcional - Upload de imagem ou PDF</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- 👕 Informações Adicionais -->
+      <section class="form-section">
+        <h2>👕 Informações Adicionais</h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tamanho da sua camisa *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="shirtSize" value="P">
+                <span class="radio-custom"></span>
+                P
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="shirtSize" value="M">
+                <span class="radio-custom"></span>
+                M
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="shirtSize" value="G">
+                <span class="radio-custom"></span>
+                G
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="shirtSize" value="GG">
+                <span class="radio-custom"></span>
+                GG
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="shirtSize" value="XG">
+                <span class="radio-custom"></span>
+                XG
+              </label>
+            </div>
+            <div class="error-message" *ngIf="submitted && f['shirtSize'].errors">
+              <span *ngIf="f['shirtSize'].errors['required']">Selecione um tamanho</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Possui alguma alergia a alimentos ou medicamentos? *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="hasAllergy" value="sim">
+                <span class="radio-custom"></span>
+                Sim
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="hasAllergy" value="nao">
+                <span class="radio-custom"></span>
+                Não
+              </label>
+            </div>
+            <div class="error-message" *ngIf="submitted && f['hasAllergy'].errors">
+              <span *ngIf="f['hasAllergy'].errors['required']">Esta informação é obrigatória</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" *ngIf="f['hasAllergy'].value === 'sim'">
+          <div class="form-group full-width">
+            <label for="allergyDetails">Se sim, qual? *</label>
+            <textarea 
+              id="allergyDetails" 
+              formControlName="allergyDetails"
+              placeholder="Descreva suas alergias"
+              rows="2"
+              [class.error]="submitted && f['allergyDetails'].errors"
+            ></textarea>
+            <div class="error-message" *ngIf="submitted && f['allergyDetails'].errors">
+              <span *ngIf="f['allergyDetails'].errors['required']">Detalhes da alergia são obrigatórios</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Faz uso de alguma medicação contínua ou importante?</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="usesMedication" value="sim">
+                <span class="radio-custom"></span>
+                Sim
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="usesMedication" value="nao">
+                <span class="radio-custom"></span>
+                Não
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" *ngIf="f['usesMedication'].value === 'sim'">
+          <div class="form-group full-width">
+            <label for="medicationDetails">Se sim, qual?</label>
+            <textarea 
+              id="medicationDetails" 
+              formControlName="medicationDetails"
+              placeholder="Descreva as medicações"
+              rows="2"
+              [class.error]="submitted && f['medicationDetails'].errors"
+            ></textarea>
+            <div class="error-message" *ngIf="submitted && f['medicationDetails'].errors">
+              <span *ngIf="f['medicationDetails'].errors['required']">Detalhes da medicação são obrigatórios</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Possui alguma restrição alimentar?</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="dietaryRestriction" value="Nenhuma">
+                <span class="radio-custom"></span>
+                Nenhuma
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="dietaryRestriction" value="Vegetariana">
+                <span class="radio-custom"></span>
+                Vegetariana
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="dietaryRestriction" value="Intolerância à lactose">
+                <span class="radio-custom"></span>
+                Intolerância à lactose
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="dietaryRestriction" value="Intolerância ao glúten">
+                <span class="radio-custom"></span>
+                Intolerância ao glúten
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="dietaryRestriction" value="Outras">
+                <span class="radio-custom"></span>
+                Outras – quais?
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ✝️ Enfoque e Cuidado -->
+      <section class="form-section">
+        <h2>✝️ Enfoque e Cuidado</h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Você já fez o teste de dom ministerial elaborado pela Lagoinha Manaus Sede? *</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="hasMinistryTest" value="sim">
+                <span class="radio-custom"></span>
+                Sim
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="hasMinistryTest" value="nao">
+                <span class="radio-custom"></span>
+                Não
+              </label>
+            </div>
+            <div class="error-message" *ngIf="submitted && f['hasMinistryTest'].errors">
+              <span *ngIf="f['hasMinistryTest'].errors['required']">Esta informação é obrigatória</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" *ngIf="f['hasMinistryTest'].value === 'sim'">
+          <div class="form-group full-width">
+            <label for="ministryTestResults">Se sim, quais foram os dois resultados? Colocando primeiro o resultado principal. *</label>
+            <textarea 
+              id="ministryTestResults" 
+              formControlName="ministryTestResults"
+              placeholder="Digite os dois resultados do teste de dom ministerial"
+              rows="3"
+              [class.error]="submitted && f['ministryTestResults'].errors"
+            ></textarea>
+            <div class="error-message" *ngIf="submitted && f['ministryTestResults'].errors">
+              <span *ngIf="f['ministryTestResults'].errors['required']">Resultados do teste são obrigatórios</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" *ngIf="f['hasMinistryTest'].value === 'nao'">
+          <div class="form-group full-width">
+            <label>Se ainda não fez, acesse o link abaixo e faça o teste, e coloque aqui a resposta:</label>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSckyHmtZXW381Xi-bZ8y-dV2DpN-nbBzJyzQWyz-lb" target="_blank" class="test-link">
+              🔗 Link para o Teste de Dom Ministerial
+            </a>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="prayerRequest">Gostaria de deixar algum pedido de oração para a equipe? *</label>
+            <textarea 
+              id="prayerRequest" 
+              formControlName="prayerRequest"
+              placeholder="Compartilhe seu pedido de oração"
+              rows="3"
+              [class.error]="submitted && f['prayerRequest'].errors"
+            ></textarea>
+            <div class="error-message" *ngIf="submitted && f['prayerRequest'].errors">
+              <span *ngIf="f['prayerRequest'].errors['required']">Pedido de oração é obrigatório</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 📸 Termos e Autorização -->
+      <section class="form-section">
+        <h2>📸 Termos e Autorização</h2>
+        
+        <div class="form-row">
+          <div class="form-group full-width">
+            <div class="checkbox-group">
+              <label class="checkbox-option">
+                <input type="checkbox" formControlName="imageAuthorization">
+                <span class="checkbox-custom"></span>
+                Autorizo o uso da minha imagem para registros, divulgação e materiais do Ministério Legacy da Igreja Batista da Lagoinha Manaus Sede. *
+              </label>
+              <div class="error-message" *ngIf="submitted && f['imageAuthorization'].errors">
+                <span *ngIf="f['imageAuthorization'].errors['required']">Esta autorização é obrigatória</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <div class="checkbox-group">
+              <label class="checkbox-option">
+                <input type="checkbox" formControlName="analysisAwareness">
+                <span class="checkbox-custom"></span>
+                Estou ciente de que minha inscrição passará por análise e será confirmada posteriormente. *
+              </label>
+              <div class="error-message" *ngIf="submitted && f['analysisAwareness'].errors">
+                <span *ngIf="f['analysisAwareness'].errors['required']">Esta confirmação é obrigatória</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <div class="checkbox-group">
+              <label class="checkbox-option">
+                <input type="checkbox" formControlName="termsAwareness">
+                <span class="checkbox-custom"></span>
+                Estou ciente dos termos contratuais anexo que deverá ser lido integralmente e enviada a cópia assinada digitalmente (gov.br) para o contato da organização. *
+              </label>
+              <div class="error-message" *ngIf="submitted && f['termsAwareness'].errors">
+                <span *ngIf="f['termsAwareness'].errors['required']">Esta confirmação é obrigatória</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <div class="checkbox-group">
+              <label class="checkbox-option">
+                <input type="checkbox" formControlName="truthDeclaration">
+                <span class="checkbox-custom"></span>
+                Declaro que todas as informações são verdadeiras e me comprometo a seguir as regras do Legacy Camp. *
+              </label>
+              <div class="error-message" *ngIf="submitted && f['truthDeclaration'].errors">
+                <span *ngIf="f['truthDeclaration'].errors['required']">Esta declaração é obrigatória</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 🧭 Encerramento -->
+      <section class="form-section">
+        <h2>🧭 Encerramento</h2>
+        <div class="info-box">
+          <p><strong>📍 Lembrando:</strong> O Legacy Camp é um acampamento com vagas limitadas.</p>
+          <p>Sua inscrição será avaliada e confirmada por nossa equipe nos dias seguintes. Fique atento ao seu e-mail, WhatsApp e redes sociais.</p>
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="submit-button"
+          [disabled]="isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">Enviar Inscrição</span>
+          <span *ngIf="isSubmitting" class="loading">
+            <span class="spinner"></span>
+            Enviando...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div> 
