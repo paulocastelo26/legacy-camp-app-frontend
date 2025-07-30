@@ -44,7 +44,7 @@ button, a, input, select, textarea {
 
 /* Otimizações para imagens responsivas */
 img {
-  max-width: 100%;
+  /* max-width: 100%; */
   height: auto;
   display: block;
 }

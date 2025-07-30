@@ -162,7 +162,6 @@
 
 .cta-section p {
   font-size: 1.2rem;
-  margin-bottom: 40px;
   opacity: 0.9;
 }
 
@@ -472,19 +471,19 @@
   align-items: center;
   justify-content: flex-start;
   margin-top: 40px;
-  margin-bottom: 32px;
+  margin-bottom: 12px;
 }
 
 .logo-wrapper img {
-  width: 100%;
-  max-width: 300px;
-  height: auto;
-  transition: transform 0.3s ease;
+  width: 1280px;
+  /* max-width: 1080px; */
+  /* height: auto; */
+  /* transition: transform 0.3s ease; */
 }
 
-.logo-wrapper img:hover {
+/* .logo-wrapper img:hover {
   transform: scale(1.05);
-}
+} */
 
 .camp-title {
   font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -610,13 +609,13 @@
   color:white;
   font-family:Helvetica, sans-serif;
   font-weight:bold;
-  font-size:36px;
+  font-size:32px;
   text-align: center;
   text-decoration:none;
   background-color:#047513;
   display:block;
   position:relative;
-  padding:20px 40px;
+  padding:15px 30px;
   border-radius: .5rem !important;
   
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -669,7 +668,7 @@
   }
   
   .logo-wrapper img {
-    max-width: 280px;
+     width: 980px;
   }
   
   .gallery-multi-image-wrapper {
@@ -703,9 +702,9 @@
     font-size: 1.3rem;
   }
   
-  .logo-wrapper img {
+  /* .logo-wrapper img {
     max-width: 250px;
-  }
+  } */
   
   .cta-section h3 {
     font-size: 1.8rem;
@@ -765,9 +764,9 @@
     font-size: 1.1rem;
   }
   
-  .logo-wrapper img {
+  /* .logo-wrapper img {
     max-width: 220px;
-  }
+  } */
   
   .cta-section h3 {
     font-size: 1.6rem;
@@ -860,10 +859,10 @@
     font-size: 1rem;
   }
   
-  .logo-wrapper img {
+  /* .logo-wrapper img {
     max-width: 200px;
   }
-  
+   */
   .cta-section h3 {
     font-size: 1.4rem;
   }
@@ -957,9 +956,9 @@
     font-size: 0.9rem;
   }
   
-  .logo-wrapper img {
+  /* .logo-wrapper img {
     max-width: 180px;
-  }
+  } */
   
   .cta-section h3 {
     font-size: 1.3rem;
