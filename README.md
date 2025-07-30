@@ -3,6 +3,7 @@
 Sistema completo de inscrições para o Legacy Camp 2025, desenvolvido com Angular (frontend) e NestJS (backend).
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/SEU_USUARIO/legacy-camp-app)
+[![Vercel](https://img.shields.io/badge/Vercel-Deploy-black?style=for-the-badge&logo=vercel)](https://legacy-camp-inscricoes.vercel.app)
 [![Angular](https://img.shields.io/badge/Angular-17-red?style=for-the-badge&logo=angular)](https://angular.io/)
 [![NestJS](https://img.shields.io/badge/NestJS-10-red?style=for-the-badge&logo=nestjs)](https://nestjs.com/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=for-the-badge&logo=mysql)](https://www.mysql.com/)
@@ -187,7 +188,9 @@ npm run test       # Executar testes
 
 ### 📖 Guias Disponíveis
 - **`GITHUB_SETUP.md`** - Configuração do GitHub
-- **`DEPLOY_GUIDE.md`** - Guia de deploy
+- **`VERCEL_DEPLOY.md`** - Deploy específico no Vercel
+- **`VERCEL_ENV_SETUP.md`** - Configuração de variáveis de ambiente
+- **`DEPLOY_GUIDE.md`** - Guia de deploy geral
 - **`DOMAIN_SETUP.md`** - Configuração de domínio
 - **`backend/GUIA_INSTALACAO.md`** - Instalação do backend
 - **`backend/TESTE_API.md`** - Testes da API

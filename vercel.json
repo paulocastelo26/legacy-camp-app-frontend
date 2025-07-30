@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "name": "legacy-camp-inscricoes",
   "builds": [
     {
       "src": "package.json",
@@ -16,6 +17,6 @@
     }
   ],
   "env": {
-    "API_URL": "@api_url"
+    "API_URL": "https://seu-backend.railway.app"
   }
 } 
