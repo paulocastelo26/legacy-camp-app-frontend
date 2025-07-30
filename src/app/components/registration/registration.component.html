@@ -14,24 +14,24 @@
       <section class="form-section">
         <h2>👤 Informações Pessoais</h2>
         
-        <div class="form-row">
-          <div class="form-group full-width">
+      <div class="form-row">
+        <div class="form-group full-width">
             <label for="fullName">Nome completo *</label>
-            <input 
-              type="text" 
-              id="fullName" 
-              formControlName="fullName"
-              placeholder="Digite seu nome completo"
-              [class.error]="submitted && f['fullName'].errors"
-            >
-            <div class="error-message" *ngIf="submitted && f['fullName'].errors">
-              <span *ngIf="f['fullName'].errors['required']">Nome é obrigatório</span>
-              <span *ngIf="f['fullName'].errors['minlength']">Nome deve ter pelo menos 3 caracteres</span>
-            </div>
+          <input 
+            type="text" 
+            id="fullName" 
+            formControlName="fullName"
+            placeholder="Digite seu nome completo"
+            [class.error]="submitted && f['fullName'].errors"
+          >
+          <div class="error-message" *ngIf="submitted && f['fullName'].errors">
+            <span *ngIf="f['fullName'].errors['required']">Nome é obrigatório</span>
+            <span *ngIf="f['fullName'].errors['minlength']">Nome deve ter pelo menos 3 caracteres</span>
           </div>
         </div>
+      </div>
 
-        <div class="form-row">
+      <div class="form-row">
           <div class="form-group">
             <label for="birthDate">Data de nascimento *</label>
             <input 
@@ -101,18 +101,18 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="email">E-mail *</label>
-            <input 
-              type="email" 
-              id="email" 
-              formControlName="email"
-              placeholder="seu@email.com"
-              [class.error]="submitted && f['email'].errors"
-            >
-            <div class="error-message" *ngIf="submitted && f['email'].errors">
-              <span *ngIf="f['email'].errors['required']">E-mail é obrigatório</span>
-              <span *ngIf="f['email'].errors['email']">Digite um e-mail válido</span>
+        <div class="form-group">
+          <label for="email">E-mail *</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email"
+            placeholder="seu@email.com"
+            [class.error]="submitted && f['email'].errors"
+          >
+          <div class="error-message" *ngIf="submitted && f['email'].errors">
+            <span *ngIf="f['email'].errors['required']">E-mail é obrigatório</span>
+            <span *ngIf="f['email'].errors['email']">Digite um e-mail válido</span>
             </div>
           </div>
         </div>
@@ -165,16 +165,16 @@
                 >
                 <div class="error-message" *ngIf="submitted && emergencyContact.get('name')?.errors">
                   <span *ngIf="emergencyContact.get('name')?.errors?.['required']">Nome é obrigatório</span>
-                </div>
-              </div>
+          </div>
+        </div>
 
-              <div class="form-group">
+        <div class="form-group">
                 <label for="emergencyPhone">Telefone *</label>
-                <input 
-                  type="tel" 
+          <input 
+            type="tel" 
                   id="emergencyPhone" 
-                  formControlName="phone"
-                  placeholder="(11) 99999-9999"
+            formControlName="phone"
+            placeholder="(11) 99999-9999"
                   (input)="formatEmergencyPhone($event)"
                   [class.error]="submitted && emergencyContact.get('phone')?.errors"
                 >
@@ -285,11 +285,11 @@
               <span *ngIf="f['registrationLot'].errors['required']">Selecione um lote</span>
             </div>
             <small class="form-help">Ambos os lotes incluem transporte, alimentação e camisa.</small>
-          </div>
         </div>
+      </div>
 
-        <div class="form-row">
-          <div class="form-group">
+      <div class="form-row">
+        <div class="form-group">
             <label>Forma de pagamento utilizada *</label>
             <div class="radio-group">
               <label class="radio-option">
@@ -317,7 +317,7 @@
         <div class="form-row">
           <div class="form-group full-width">
             <label for="paymentProof">Anexe o comprovante de pagamento</label>
-            <input 
+          <input 
               type="file" 
               id="paymentProof" 
               formControlName="paymentProof"
@@ -369,7 +369,7 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group">
+        <div class="form-group">
             <label>Possui alguma alergia a alimentos ou medicamentos? *</label>
             <div class="radio-group">
               <label class="radio-option">
@@ -401,12 +401,12 @@
             ></textarea>
             <div class="error-message" *ngIf="submitted && f['allergyDetails'].errors">
               <span *ngIf="f['allergyDetails'].errors['required']">Detalhes da alergia são obrigatórios</span>
-            </div>
           </div>
         </div>
+      </div>
 
-        <div class="form-row">
-          <div class="form-group">
+      <div class="form-row">
+        <div class="form-group">
             <label>Faz uso de alguma medicação contínua ou importante?</label>
             <div class="radio-group">
               <label class="radio-option">
@@ -478,7 +478,7 @@
         <h2>✝️ Enfoque e Cuidado</h2>
         
         <div class="form-row">
-          <div class="form-group">
+        <div class="form-group">
             <label>Você já fez o teste de dom ministerial elaborado pela Lagoinha Manaus Sede? *</label>
             <div class="radio-group">
               <label class="radio-option">
@@ -586,8 +586,8 @@
                 <span *ngIf="f['termsAwareness'].errors['required']">Esta confirmação é obrigatória</span>
               </div>
             </div>
-          </div>
         </div>
+      </div>
 
         <div class="form-row">
           <div class="form-group full-width">

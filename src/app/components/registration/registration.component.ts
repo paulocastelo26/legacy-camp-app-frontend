@@ -190,9 +190,9 @@ export class RegistrationComponent {
       this.inscricaoService.criarInscricao(inscricao).subscribe({
         next: (response) => {
           console.log('Inscrição criada com sucesso:', response);
-          this.isSubmitting = false;
-          alert('Inscrição realizada com sucesso! Em breve entraremos em contato.');
-          this.router.navigate(['/']);
+        this.isSubmitting = false;
+        alert('Inscrição realizada com sucesso! Em breve entraremos em contato.');
+        this.router.navigate(['/']);
         },
         error: (error) => {
           console.error('Erro ao criar inscrição:', error);

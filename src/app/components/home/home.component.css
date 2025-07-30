@@ -1,5 +1,4 @@
 .home-container {
- 
   min-height: 100vh;
   font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -19,7 +18,6 @@
   padding: 60px 0 40px 0;
   background: rgba(0,0,0,0.5);
   text-align: center;
-  /* padding: 80px 0; */
   text-align: center;
 }
 
@@ -40,7 +38,6 @@
 }
 
 .camp-subtitle {
-  
   font-family: 'Permanent Marker', cursive;
   font-size: 1.5rem;
   font-weight: 500;
@@ -151,15 +148,13 @@
 
 /* CTA Section */
 .cta-section {
-  /* padding: 80px 0; */
-  /* background: rgba(61, 11, 4, 0.85); */
   color: #FFF;
   text-align: center;
   border-radius: 20px;
   margin: 40px 0;
 }
 
-.cta-section h2 {
+.cta-section h3 {
   font-size: 2.5rem;
   margin-bottom: 20px;
   font-weight: 600;
@@ -216,20 +211,6 @@
   text-shadow: 0 2px 12px rgba(0,0,0,0.18);
 }
 
-@media (max-width: 900px) {
-  .cta-button-large {
-    padding: 22px 10vw 18px 10vw;
-    font-size: 1.2rem;
-    min-width: 0;
-  }
-  .button-text {
-    font-size: 1.2rem;
-  }
-  .button-price {
-    font-size: 1rem;
-  }
-}
-
 .cta-button-large:active {
   transform: translateY(1px);
   box-shadow: 
@@ -258,7 +239,33 @@
   opacity: 1;
 }
 
+/* Responsividade melhorada */
+@media (max-width: 1200px) {
+  .container {
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 900px) {
+  .cta-button-large {
+    padding: 22px 10vw 18px 10vw;
+    font-size: 1.2rem;
+    min-width: 0;
+  }
+  .button-text {
+    font-size: 1.2rem;
+  }
+  .button-price {
+    font-size: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
+  /* CTA Section */
+.cta-section {
+  margin: 0 0;
+}
+
   .camp-title {
     font-size: 3.5rem;
   }
@@ -268,7 +275,7 @@
   .info-grid {
     grid-template-columns: 1fr;
   }
-  .cta-section h2 {
+  .cta-section h3 {
     font-size: 2rem;
   }
   .cta-button-large {
@@ -279,7 +286,7 @@
 
 @media (max-width: 480px) {
   .info-section, .cta-section {
-    padding: 60px 0;
+    padding: 20px 0;
   }
   .container {
     padding: 0 15px;
@@ -288,7 +295,6 @@
 
 .testimonials-section {
   padding: 10px 0 40px 0;
-  
   text-align: center;
 }
 
@@ -456,27 +462,6 @@
   border-color: #3d0b04;
 }
 
-@media (max-width: 900px) {
-  .gallery-image-wrapper {
-    width: 98vw;
-    max-width: 98vw;
-    height: 220px;
-    border-radius: 18px;
-  }
-  .gallery-image {
-    border-radius: 18px;
-  }
-}
-@media (max-width: 600px) {
-  .gallery-image-wrapper {
-    height: 160px;
-    border-radius: 12px;
-  }
-  .gallery-image {
-    border-radius: 12px;
-  }
-} 
-
 .gallery-arrow .material-icons {
   font-size: 2.6rem;
   line-height: 1;
@@ -495,6 +480,17 @@
   margin-bottom: 32px;
 }
 
+/* .logo-wrapper img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.logo-wrapper img:hover {
+  transform: scale(1.05);
+} */
+
 .camp-title {
   font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 3.5rem;
@@ -512,7 +508,6 @@
 }
 
 .camp-subtitle {
-
   font-size: 1.5rem;
   font-weight: 500;
   color: #b6ffb0;
@@ -523,19 +518,6 @@
   font-style: italic;
   text-shadow: 0 2px 12px rgba(0,0,0,0.25);
 }
-
-@media (max-width: 600px) {
-  .camp-title {
-    font-size: 2.1rem;
-  }
-  .camp-subtitle {
-    font-size: 1.1rem;
-  }
-  .logo-wrapper {
-    margin-top: 24px;
-    margin-bottom: 18px;
-  }
-} 
 
 .countdown-label {
   text-align: center;
@@ -586,20 +568,6 @@
   opacity: 0.7;
   line-height: 1;
 }
-@media (max-width: 600px) {
-  .countdown-value {
-    font-size: 2.5rem;
-  }
-  .countdown-label {
-    font-size: 0.9rem;
-  }
-  .countdown-item {
-    min-width: 28px;
-  }
-  .countdown-sep {
-    font-size: 2.5rem;
-  }
-} 
 
 .gallery-multi-image-wrapper {
   display: flex;
@@ -636,22 +604,6 @@
   box-shadow: 0 8px 32px rgba(0,0,0,0.32);
   border: 3px solid #3d0b04;
 }
-
-@media (max-width: 900px) {
-  .gallery-multi-image-wrapper {
-    height: 100px;
-  }
-  .gallery-multi-image {
-    width: 90px;
-    height: 60px;
-    border-radius: 6px;
-  }
-  .gallery-image-center {
-    width: 160px;
-    height: 90px;
-    border-radius: 8px;
-  }
-} 
 
 .button{
   position:relative;
@@ -707,4 +659,419 @@
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+}
+
+/* ===== RESPONSIVIDADE MELHORADA ===== */
+
+/* Tablets e telas médias */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 20px;
+  }
+  
+  .camp-title {
+    font-size: 4.5rem;
+  }
+  
+  .logo-wrapper img {
+    max-width: 1080px;
+  }
+  
+  .gallery-multi-image-wrapper {
+    width: 90vw;
+    height: 200px;
+  }
+  
+  .gallery-multi-image {
+    width: 280px;
+    height: 160px;
+  }
+  
+  .gallery-image-center {
+    width: 360px;
+    height: 180px;
+  }
+}
+
+/* Tablets pequenos */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .camp-title {
+    font-size: 3.2rem;
+    letter-spacing: 0.05em;
+  }
+  
+  .camp-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  /* .logo-wrapper img {
+    max-width: 250px;
+  } */
+  
+  .cta-section h3 {
+    font-size: 1.8rem;
+  }
+  
+  .cta-section p {
+    font-size: 1.1rem;
+  }
+  
+  .testimonials-title {
+    font-size: 1.8rem;
+  }
+  
+  .gallery-title {
+    font-size: 1.8rem;
+  }
+  
+  .gallery-multi-image-wrapper {
+    height: 160px;
+    gap: 12px;
+  }
+  
+  .gallery-multi-image {
+    width: 200px;
+    height: 120px;
+  }
+  
+  .gallery-image-center {
+    width: 280px;
+    height: 140px;
+  }
+  
+  .gallery-arrow {
+    width: 40px;
+    height: 40px;
+    margin: 0 8px;
+  }
+  
+  .gallery-arrow .material-icons {
+    font-size: 2rem;
+  }
+  
+  .button a {
+    font-size: 28px;
+    padding: 16px 32px;
+  }
+}
+
+/* Smartphones grandes */
+@media (max-width: 600px) {
+  .camp-title {
+    font-size: 2.5rem;
+    letter-spacing: 0.03em;
+  }
+  
+  .camp-subtitle {
+    font-size: 1.1rem;
+  }
+/*   
+  .logo-wrapper img {
+    max-width: 220px;
+  }
+   */
+  .cta-section h3 {
+    font-size: 1.6rem;
+  }
+  
+  .cta-section p {
+    font-size: 1rem;
+  }
+  
+  .testimonials-title {
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+  }
+  
+  .gallery-title {
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+  }
+  
+  .testimonial-card {
+    padding: 24px 20px;
+    margin: 0 4px;
+  }
+  
+  .testimonial-text {
+    font-size: 1rem;
+  }
+  
+  .gallery-multi-image-wrapper {
+    height: 120px;
+    gap: 8px;
+  }
+  
+  .gallery-multi-image {
+    width: 140px;
+    height: 80px;
+    border-radius: 8px;
+  }
+  
+  .gallery-image-center {
+    width: 200px;
+    height: 100px;
+    border-radius: 10px;
+  }
+  
+  .gallery-arrow {
+    width: 36px;
+    height: 36px;
+    margin: 0 6px;
+  }
+  
+  .gallery-arrow .material-icons {
+    font-size: 1.8rem;
+  }
+  
+  .button a {
+    font-size: 24px;
+    padding: 14px 28px;
+  }
+  
+  .countdown-value {
+    font-size: 3rem;
+  }
+  
+  .countdown-label {
+    font-size: 0.8rem;
+  }
+  
+  .countdown-item {
+    min-width: 40px;
+  }
+  
+  .countdown-sep {
+    font-size: 3rem;
+  }
+}
+
+/* Smartphones pequenos */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+  
+  .camp-title {
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+  }
+  
+  .camp-subtitle {
+    font-size: 1rem;
+  }
+  
+  /* .logo-wrapper img {
+    max-width: 200px;
+  }
+   */
+  .cta-section h3 {
+    font-size: 1.4rem;
+  }
+  
+  .cta-section p {
+    font-size: 0.95rem;
+  }
+  
+  .testimonials-title {
+    font-size: 1.4rem;
+  }
+  
+  .gallery-title {
+    font-size: 1.4rem;
+  }
+  
+  .testimonial-card {
+    padding: 20px 16px;
+    margin: 0 2px;
+  }
+  
+  .testimonial-text {
+    font-size: 0.95rem;
+  }
+  
+  .testimonial-author {
+    font-size: 0.9rem;
+  }
+  
+  .gallery-multi-image-wrapper {
+    height: 100px;
+    gap: 6px;
+  }
+  
+  .gallery-multi-image {
+    width: 100px;
+    height: 60px;
+    border-radius: 6px;
+  }
+  
+  .gallery-image-center {
+    width: 160px;
+    height: 80px;
+    border-radius: 8px;
+  }
+  
+  .gallery-arrow {
+    width: 32px;
+    height: 32px;
+    margin: 0 4px;
+  }
+  
+  .gallery-arrow .material-icons {
+    font-size: 1.6rem;
+  }
+  
+  .button a {
+    font-size: 20px;
+    padding: 12px 24px;
+  }
+  
+  .countdown-value {
+    font-size: 2.5rem;
+  }
+  
+  .countdown-label {
+    font-size: 0.7rem;
+  }
+  
+  .countdown-item {
+    min-width: 35px;
+  }
+  
+  .countdown-sep {
+    font-size: 2.5rem;
+  }
+  
+  .footer {
+    font-size: 1rem;
+    padding: 20px 0 15px 0;
+  }
+}
+
+/* Smartphones muito pequenos */
+@media (max-width: 360px) {
+  .camp-title {
+    font-size: 1.8rem;
+  }
+  
+  .camp-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  /* .logo-wrapper img {
+    max-width: 180px;
+  }
+   */
+  .cta-section h3 {
+    font-size: 1.3rem;
+  }
+  
+  .cta-section p {
+    font-size: 0.9rem;
+  }
+  
+  .testimonials-title {
+    font-size: 1.3rem;
+  }
+  
+  .gallery-title {
+    font-size: 1.3rem;
+  }
+  
+  .gallery-multi-image-wrapper {
+    height: 80px;
+  }
+  
+  .gallery-multi-image {
+    width: 80px;
+    height: 50px;
+  }
+  
+  .gallery-image-center {
+    width: 120px;
+    height: 60px;
+  }
+  
+  .button a {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+  
+  .countdown-value {
+    font-size: 2rem;
+  }
+  
+  .countdown-label {
+    font-size: 0.6rem;
+  }
+  
+  .countdown-item {
+    min-width: 30px;
+  }
+  
+  .countdown-sep {
+    font-size: 2rem;
+  }
+}
+
+/* Melhorias para touch em dispositivos móveis */
+@media (hover: none) and (pointer: coarse) {
+  .button a:hover {
+    transform: none;
+  }
+  
+  .info-card:hover {
+    transform: none;
+  }
+  
+  .gallery-arrow:hover {
+    transform: none;
+  }
+  
+  .gallery-dot:hover {
+    transform: none;
+  }
+  
+  /* Aumentar área de toque */
+  .gallery-arrow {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .gallery-dot {
+    min-width: 20px;
+    min-height: 20px;
+  }
+  
+  .button a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Orientação landscape em mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .camp-title {
+    font-size: 2.2rem;
+  }
+  
+  .gallery-multi-image-wrapper {
+    height: 140px;
+  }
+  
+  .gallery-multi-image {
+    width: 180px;
+    height: 100px;
+  }
+  
+  .gallery-image-center {
+    width: 240px;
+    height: 120px;
+  }
 }

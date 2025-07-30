@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -43,8 +43,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   eventDate = new Date('2025-11-14T00:00:00');
   countdown = { days: 0, hours: 0, minutes: 0, seconds: 0 };
   private countdownInterval: any;
+  
+  // Detecção de dispositivo móvel
+  isMobile = false;
+  isTablet = false;
+  autoplayIntervalTime = 3500; // Tempo padrão para desktop
 
   constructor(private router: Router) {
+    this.detectDevice();
     this.cards = [
       {
         icon: 'calendar_month',
@@ -82,17 +88,60 @@ export class HomeComponent implements OnInit, OnDestroy {
     clearInterval(this.countdownInterval);
   }
 
+  // Detectar tipo de dispositivo
+  private detectDevice() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const screenWidth = window.innerWidth;
+    
+    this.isMobile = /mobile|android|iphone|ipad|phone|blackberry|opera mini|iemobile/i.test(userAgent) || screenWidth <= 768;
+    this.isTablet = screenWidth > 768 && screenWidth <= 1024;
+    
+    // Ajustar intervalo de autoplay baseado no dispositivo
+    if (this.isMobile) {
+      this.autoplayIntervalTime = 5000; // Mais lento em mobile para economizar bateria
+    } else if (this.isTablet) {
+      this.autoplayIntervalTime = 4000;
+    }
+  }
+
+  // Listener para mudanças de orientação e redimensionamento
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.detectDevice();
+    // Reiniciar autoplay com novo intervalo se necessário
+    if (this.autoplayInterval) {
+      this.stopAutoplay();
+      this.startAutoplay();
+    }
+  }
+
+  // Listener para visibilidade da página (pausar quando não visível)
+  @HostListener('window:visibilitychange')
+  onVisibilityChange() {
+    if (document.hidden) {
+      this.pauseAutoplay();
+    } else {
+      this.resumeAutoplay();
+    }
+  }
+
   startAutoplay() {
+    // Não iniciar autoplay em dispositivos móveis se o usuário preferir movimento reduzido
+    if (this.isMobile && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+    
     this.autoplayInterval = setInterval(() => {
       if (!this.isPaused) {
         this.nextImage();
       }
-    }, 3500);
+    }, this.autoplayIntervalTime);
   }
 
   stopAutoplay() {
     if (this.autoplayInterval) {
       clearInterval(this.autoplayInterval);
+      this.autoplayInterval = null;
     }
   }
 
@@ -162,5 +211,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.galleryImages[this.currentImage],
       this.galleryImages[next]
     ];
+  }
+
+  // Otimização para touch: prevenir zoom em imagens
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent) {
+    // Prevenir zoom em imagens da galeria
+    if ((event.target as HTMLElement).tagName === 'IMG') {
+      event.preventDefault();
+    }
   }
 } 

@@ -2,7 +2,7 @@
   <main class="main-content">
     <section class="testimonials-section">
       <div class="logo-wrapper">
-        <img src="../../../assets/logo.png" alt="" style="width: 100%" />
+        <img src="../../../assets/logo.png" alt="Logo Legacy Camp" />
 
         <section class="cta-section">
           <div class="container">
@@ -11,7 +11,7 @@
 
             <div>
               <div class="button">
-                <a href="javascript:void(0)" (click)="buyTicket()">Adquira aqui!</a>
+                <a href="javascript:void(0)" (click)="buyTicket()" role="button" aria-label="Comprar ingresso para o Legacy Camp">Adquira aqui!</a>
               </div>
             </div>
 
@@ -23,22 +23,22 @@
         <div class="testimonials-grid">
           <div class="testimonial-card">
             <p class="testimonial-text">
-              “Foi um final de semana que mudou minha vida! Fiz amizades
-              incríveis e cresci muito espiritualmente.”
+              "Foi um final de semana que mudou minha vida! Fiz amizades
+              incríveis e cresci muito espiritualmente."
             </p>
             <span class="testimonial-author">— Ana Paula, Manaus/Am</span>
           </div>
           <div class="testimonial-card">
             <p class="testimonial-text">
-              “O Legacy Camp é uma experiência única, cheia de diversão,
-              aprendizado e presença de Deus!”
+              "O Legacy Camp é uma experiência única, cheia de diversão,
+              aprendizado e presença de Deus!"
             </p>
             <span class="testimonial-author">— Lucas Silva, Manaus/Am</span>
           </div>
           <div class="testimonial-card">
             <p class="testimonial-text">
-              “Recomendo para todo jovem! Ambiente seguro, acolhedor e com muita
-              energia positiva.”
+              "Recomendo para todo jovem! Ambiente seguro, acolhedor e com muita
+              energia positiva."
             </p>
             <span class="testimonial-author">— Beatriz Souza, Manaus/Am</span>
           </div>
@@ -54,37 +54,45 @@
             class="gallery-arrow left"
             (click)="prevImage()"
             aria-label="Imagem anterior"
+            type="button"
           >
-            <span class="material-icons">chevron_left</span>
+            <span class="material-icons" aria-hidden="true">chevron_left</span>
           </button>
           <div
             class="gallery-image-wrapper gallery-multi-image-wrapper"
             (mouseenter)="pauseAutoplay()"
             (mouseleave)="resumeAutoplay()"
+            role="region"
+            aria-label="Galeria de fotos do evento"
           >
             <img
               *ngFor="let img of getVisibleImages(); let idx = index"
               [src]="img"
-              alt="Foto do evento"
+              alt="Foto do evento Legacy Camp"
               class="gallery-image gallery-multi-image"
               [class.gallery-image-center]="idx === 1"
+              loading="lazy"
             />
           </div>
           <button
             class="gallery-arrow right"
             (click)="nextImage()"
             aria-label="Próxima imagem"
+            type="button"
           >
-            <span class="material-icons">chevron_right</span>
+            <span class="material-icons" aria-hidden="true">chevron_right</span>
           </button>
         </div>
-        <div class="gallery-dots">
+        <div class="gallery-dots" role="tablist" aria-label="Navegação da galeria">
           <button
             *ngFor="let img of galleryImages; let i = index"
             class="gallery-dot"
             [class.active]="i === currentImage"
             (click)="goToImage(i)"
             [attr.aria-label]="'Ir para imagem ' + (i + 1)"
+            [attr.aria-selected]="i === currentImage"
+            role="tab"
+            type="button"
           ></button>
         </div>
       </div>

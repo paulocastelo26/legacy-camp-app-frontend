@@ -1,0 +1,35 @@
+{
+  "name": "Legacy Camp - Evento Lagoinha Manaus",
+  "short_name": "Legacy Camp",
+  "description": "Um fim de semana inesquecível de diversão, aprendizado e presença de Deus",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#013f0e",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["events", "lifestyle", "education"],
+  "screenshots": [
+    {
+      "src": "assets/legacy-camp-banner.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+} 
