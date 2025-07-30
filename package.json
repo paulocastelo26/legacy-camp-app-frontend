@@ -5,8 +5,11 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "clean": "rimraf dist .angular",
+    "clean:all": "rimraf dist .angular node_modules package-lock.json && npm install"
   },
   "private": true,
   "dependencies": {
