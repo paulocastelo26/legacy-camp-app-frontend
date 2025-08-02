@@ -43,7 +43,7 @@ export interface Inscricao {
   providedIn: 'root'
 })
 export class InscricaoService {
-  private apiUrl = 'http://localhost:3000/inscricoes';
+  private apiUrl = 'https://legacy-camp-app-backend-production.up.railway.app/inscricoes';
 
   constructor(private http: HttpClient) { }
 

@@ -32,10 +32,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentCard = 0;
 
   galleryImages: string[] = [
-    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=80'
+    'assets/photos/IMG_0939.JPG',
+    'assets/photos/IMG_0949.JPG',
+    'assets/photos/IMG_1115.JPG',
+    'assets/photos/IMG_1469.JPG',
+    'assets/photos/IMG_1476.JPG',
+    'assets/photos/IMG_1497.JPG',
+    'assets/photos/IMG_1503.JPG'
   ];
   currentImage = 0;
   private autoplayInterval: any;
