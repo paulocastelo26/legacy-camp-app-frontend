@@ -484,4 +484,336 @@
   .checkbox-option {
     font-size: 0.9rem;
   }
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: #000;
+  border: 1px solid #333;
+  border-radius: 20px;
+  max-width: 400px;
+  width: 90%;
+  margin: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  animation: slideIn 0.3s ease;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: #111;
+  padding: 20px 25px;
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  color: #FFF;
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFF;
+}
+
+.modal-body {
+  padding: 30px 25px;
+  text-align: center;
+}
+
+.modal-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.modal-icon.success {
+  background: rgba(1, 63, 14, 0.2);
+  border: 2px solid #013f0e;
+  color: #013f0e;
+}
+
+.modal-icon.error {
+  background: rgba(61, 11, 4, 0.2);
+  border: 2px solid #3d0b04;
+  color: #3d0b04;
+}
+
+.modal-body p {
+  color: #FFF;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.modal-footer {
+  padding: 20px 25px;
+  border-top: 1px solid #333;
+  text-align: center;
+}
+
+.modal-button {
+  background: linear-gradient(145deg, #3d0b04, #5a1a0a, #3d0b04);
+  color: #FFF;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.modal-button:hover {
+  background: linear-gradient(145deg, #5a1a0a, #7a2a15, #5a1a0a);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(61, 11, 4, 0.4);
+}
+
+/* Animações do modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsividade do modal */
+@media (max-width: 480px) {
+  .modal-content {
+    margin: 10px;
+    width: 95%;
+  }
+  
+  .modal-header {
+    padding: 15px 20px;
+  }
+  
+  .modal-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .modal-body {
+    padding: 25px 20px;
+  }
+  
+  .modal-footer {
+    padding: 15px 20px;
+  }
+  
+  .modal-button {
+    width: 100%;
+    padding: 15px;
+  }
+}
+
+/* Estilos específicos do Modal PIX */
+.pix-modal {
+  max-width: 500px;
+}
+
+.pix-info {
+  text-align: center;
+}
+
+.pix-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(145deg, #013f0e, #025a1a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 2.5rem;
+  box-shadow: 0 8px 20px rgba(1, 63, 14, 0.3);
+}
+
+.pix-info h4 {
+  color: #FFF;
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.pix-details {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.pix-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #333;
+  color: #FFF;
+}
+
+.pix-item:last-child {
+  border-bottom: none;
+}
+
+.pix-item strong {
+  color: #888;
+  font-size: 0.9rem;
+  min-width: 120px;
+}
+
+.pix-key {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  color: #013f0e;
+  background: rgba(1, 63, 14, 0.1);
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #013f0e;
+}
+
+.pix-value {
+  font-weight: bold;
+  color: #013f0e;
+  font-size: 1.1rem;
+}
+
+.copy-button {
+  background: rgba(1, 63, 14, 0.2);
+  border: 1px solid #013f0e;
+  color: #013f0e;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.copy-button:hover {
+  background: rgba(1, 63, 14, 0.3);
+  transform: translateY(-1px);
+}
+
+.copy-button.copied {
+  background: rgba(1, 63, 14, 0.4);
+  border-color: #013f0e;
+  color: #FFF;
+  transform: scale(1.05);
+}
+
+.pix-instructions {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.pix-instructions h5 {
+  color: #FFF;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.pix-instructions ol {
+  color: #FFF;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.pix-instructions li {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.pix-instructions strong {
+  color: #013f0e;
+}
+
+/* Responsividade do modal PIX */
+@media (max-width: 480px) {
+  .pix-modal {
+    margin: 10px;
+    width: 95%;
+  }
+  
+  .pix-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .pix-item strong {
+    min-width: auto;
+  }
+  
+  .copy-button {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+  
+  .pix-instructions {
+    padding: 15px;
+  }
 } 

@@ -16,6 +16,19 @@ export class RegistrationComponent {
   isSubmitting = false;
   submitted = false;
 
+  pixKey = 'lgcymanaus@gmail.com';
+
+  // Propriedades do modal
+  showModal = false;
+  modalTitle = '';
+  modalMessage = '';
+  modalType: 'success' | 'error' = 'success';
+  modalButtonText = 'OK';
+
+  // Propriedades do modal PIX
+  showPixModal = false;
+  pixKeyCopied = false;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -30,7 +43,7 @@ export class RegistrationComponent {
       phone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\) \d{5}-\d{4}$/)]],
       email: ['', [Validators.required, Validators.email]],
       address: ['', [Validators.required]],
-      socialMedia: ['', [Validators.required]],
+      socialMedia: [''],
       emergencyContact: this.fb.group({
         name: ['', [Validators.required]],
         phone: ['', [Validators.required]],
@@ -40,7 +53,7 @@ export class RegistrationComponent {
       // Informações de Igreja
       isLagoinhaMember: ['', [Validators.required]],
       churchName: ['', [Validators.required]],
-      ministryParticipation: ['', [Validators.required]],
+      ministryParticipation: [''],
 
       // Informações da Inscrição
       registrationLot: ['', [Validators.required]],
@@ -190,14 +203,13 @@ export class RegistrationComponent {
       this.inscricaoService.criarInscricao(inscricao).subscribe({
         next: (response) => {
           console.log('Inscrição criada com sucesso:', response);
-        this.isSubmitting = false;
-        alert('Inscrição realizada com sucesso! Em breve entraremos em contato.');
-        this.router.navigate(['/']);
+          this.isSubmitting = false;
+          this.showSuccessModal('Inscrição realizada com sucesso! Em breve entraremos em contato com mais informações e contrato.');
         },
         error: (error) => {
           console.error('Erro ao criar inscrição:', error);
           this.isSubmitting = false;
-          alert('Erro ao enviar inscrição. Tente novamente.');
+          this.showErrorModal('Erro ao enviar inscrição. Tente novamente.');
         }
       });
     }
@@ -225,5 +237,62 @@ export class RegistrationComponent {
 
   goBack() {
     this.router.navigate(['/']);
+  }
+
+  // Métodos do modal
+  showSuccessModal(message: string) {
+    this.modalTitle = 'Sucesso!';
+    this.modalMessage = message;
+    this.modalType = 'success';
+    this.modalButtonText = 'OK';
+    this.showModal = true;
+  }
+
+  showErrorModal(message: string) {
+    this.modalTitle = 'Erro!';
+    this.modalMessage = message;
+    this.modalType = 'error';
+    this.modalButtonText = 'Tentar Novamente';
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+    if (this.modalType === 'success') {
+      this.router.navigate(['/']);
+    }
+  }
+
+  // Métodos do modal PIX
+  onPaymentMethodChange(method: string) {
+    if (method === 'pix') {
+      this.showPixModal = true;
+    }
+  }
+
+  closePixModal() {
+    this.showPixModal = false;
+  }
+
+  getPixValue(): string {
+    const lot = this.registrationForm.get('registrationLot')?.value;
+    if (lot === 'lote1') {
+      return 'R$ 250,00';
+    } else if (lot === 'lote2') {
+      return 'R$ 300,00';
+    }
+    return 'R$ 300,00';
+  }
+
+  copyPixKey() {
+    const pixKey = 'lgcymanaus@gmail.com';
+    navigator.clipboard.writeText(pixKey).then(() => {
+      this.pixKeyCopied = true;
+      setTimeout(() => {
+        this.pixKeyCopied = false;
+      }, 2000);
+    }).catch(err => {
+      console.error('Erro ao copiar chave PIX:', err);
+    });
   }
 } 

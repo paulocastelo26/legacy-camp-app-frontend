@@ -135,7 +135,7 @@
 
         <div class="form-row">
           <div class="form-group full-width">
-            <label for="socialMedia">Rede Social *</label>
+            <label for="socialMedia">Rede Social</label>
             <input 
               type="text" 
               id="socialMedia" 
@@ -247,7 +247,7 @@
 
         <div class="form-row">
           <div class="form-group full-width">
-            <label for="ministryParticipation">Você participa de algum ministério (voluntário ou líder) e algum GC? Quais? *</label>
+            <label for="ministryParticipation">Você participa de algum ministério (voluntário ou líder) e algum GC? Quais?</label>
             <textarea 
               id="ministryParticipation" 
               formControlName="ministryParticipation"
@@ -293,7 +293,7 @@
             <label>Forma de pagamento utilizada *</label>
             <div class="radio-group">
               <label class="radio-option">
-                <input type="radio" formControlName="paymentMethod" value="pix">
+                <input type="radio" formControlName="paymentMethod" value="pix" (change)="onPaymentMethodChange('pix')">
                 <span class="radio-custom"></span>
                 PIX
               </label>
@@ -628,5 +628,73 @@
         </button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Modal do PIX -->
+<div class="modal-overlay" *ngIf="showPixModal" (click)="closePixModal()">
+  <div class="modal-content pix-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>💳 Informações do PIX</h3>
+      <button class="modal-close" (click)="closePixModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="pix-info">
+        <div class="pix-icon">
+          <span>💳</span>
+        </div>
+        <h4>Chave PIX para Pagamento</h4>
+        <div class="pix-details">
+          <div class="pix-item">
+            <strong>Tipo de Chave:</strong>
+            <span>Email</span>
+          </div>
+          <div class="pix-item">
+            <strong>Chave PIX:</strong>
+            <span class="pix-key">{{pixKey}}</span>
+            <button class="copy-button" [class.copied]="pixKeyCopied" (click)="copyPixKey()">
+              <span *ngIf="!pixKeyCopied">📋</span>
+              <span *ngIf="pixKeyCopied">✓</span>
+              {{ pixKeyCopied ? 'Copiado!' : 'Copiar' }}
+            </button>
+          </div>
+          <div class="pix-item">
+            <strong>Beneficiário:</strong>
+            <span>Legacy AM</span>
+          </div>
+          <div class="pix-item">
+            <strong>Valor:</strong>
+            <span class="pix-value">{{ getPixValue() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-button" (click)="closePixModal()">
+        Entendi
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ modalTitle }}</h3>
+      <button class="modal-close" (click)="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-icon" [class]="modalType">
+        <span *ngIf="modalType === 'success'">✓</span>
+        <span *ngIf="modalType === 'error'">✕</span>
+      </div>
+      <p>{{ modalMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-button" (click)="closeModal()">
+        {{ modalButtonText }}
+      </button>
+    </div>
   </div>
 </div> 
