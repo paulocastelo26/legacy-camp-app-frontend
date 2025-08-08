@@ -16,7 +16,7 @@ export class RegistrationComponent {
   isSubmitting = false;
   submitted = false;
 
-  pixKey = 'lgcymanaus@gmail.com';
+  pixKey = 'pix.legacy.am@gmail.com';
 
   // Propriedades do modal
   showModal = false;
