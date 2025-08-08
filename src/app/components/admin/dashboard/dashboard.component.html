@@ -1,0 +1,283 @@
+<div class="admin-container">
+  <header class="admin-header">
+    <div class="header-content">
+      <h1>Painel Administrativo</h1>
+      <div class="header-actions">
+        <span class="welcome-text">Bem-vindo, Administrador!</span>
+        <button class="logout-button" (click)="logout()">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <h3>Total de Inscrições</h3>
+        <p class="stat-number">{{ inscricoes.length }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Pendentes</h3>
+        <p class="stat-number">{{ getInscricoesPorStatus('pendente') }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Aprovadas</h3>
+        <p class="stat-number">{{ getInscricoesPorStatus('aprovado') }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Rejeitadas</h3>
+        <p class="stat-number">{{ getInscricoesPorStatus('rejeitado') }}</p>
+      </div>
+    </div>
+
+    <div class="filters-section">
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Buscar por nome, email ou telefone..."
+          class="search-input"
+        >
+      </div>
+      <div class="status-filter">
+        <select [(ngModel)]="statusFilter" class="status-select">
+          <option value="">Todos os status</option>
+          <option value="pendente">Pendente</option>
+          <option value="aprovado">Aprovado</option>
+          <option value="rejeitado">Rejeitado</option>
+        </select>
+      </div>
+      <button class="refresh-button" (click)="carregarInscricoes()" [disabled]="isLoading">
+        {{ isLoading ? 'Carregando...' : 'Atualizar' }}
+      </button>
+    </div>
+
+    <div class="table-container">
+      <div *ngIf="isLoading" class="loading">
+        <p>Carregando inscrições...</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="!isLoading && !errorMessage" class="table-wrapper">
+        <table class="inscricoes-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Pag.</th>
+              <th>Email</th>
+              <th>Telefone</th>
+              <th>Lote</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let inscricao of inscricoesFiltradas" class="table-row" style="color: #000;">
+              <td>
+                <div class="inscricao-info">
+                  <strong>{{ inscricao.fullName }}</strong>
+                  <small>{{ inscricao.gender }}</small>
+                </div>
+              </td>
+              <td>{{ inscricao.paymentMethod }}</td>
+              <td>{{ inscricao.email }}</td>
+              <td>{{ inscricao.phone }}</td>
+              <td>{{ inscricao.registrationLot }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusClass(inscricao.status)">
+                  {{ inscricao.status || 'pendente' }}
+                </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <button 
+                    class="details-button" 
+                    (click)="abrirDetalhes(inscricao)"
+                    title="Ver detalhes"
+                  >
+                    👁️
+                  </button>
+                  <select 
+                    (change)="atualizarStatus(inscricao, $any($event.target).value)"
+                    class="status-select-small"
+                    [value]="inscricao.status || 'pendente'"
+                  >
+                    <option value="pendente">Pendente</option>
+                    <option value="aprovado">Aprovado</option>
+                    <option value="rejeitado">Rejeitado</option>
+                  </select>
+                  <button 
+                    class="delete-button" 
+                    (click)="removerInscricao(inscricao)"
+                    title="Remover inscrição"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="inscricoesFiltradas.length === 0" class="no-results">
+          <p>Nenhuma inscrição encontrada.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal de Detalhes -->
+<div *ngIf="showDetailsModal && selectedInscricao" class="modal-overlay" (click)="fecharDetalhes()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Detalhes da Inscrição</h2>
+      <button class="close-button" (click)="fecharDetalhes()">×</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="details-grid">
+        <!-- Informações Pessoais -->
+        <div class="detail-section">
+          <h3>Informações Pessoais</h3>
+          <div class="detail-item">
+            <strong>Nome Completo:</strong> {{ selectedInscricao.fullName }}
+          </div>
+          <div class="detail-item">
+            <strong>Data de Nascimento:</strong> {{ formatarData(selectedInscricao.birthDate) }}
+          </div>
+          <div class="detail-item">
+            <strong>Idade:</strong> {{ selectedInscricao.age }} anos
+          </div>
+          <div class="detail-item">
+            <strong>Gênero:</strong> {{ selectedInscricao.gender }}
+          </div>
+          <div class="detail-item">
+            <strong>Telefone:</strong> {{ selectedInscricao.phone }}
+          </div>
+          <div class="detail-item">
+            <strong>Email:</strong> {{ selectedInscricao.email }}
+          </div>
+          <div class="detail-item">
+            <strong>Endereço:</strong> {{ selectedInscricao.address }}
+          </div>
+          <div class="detail-item">
+            <strong>Rede Social:</strong> {{ selectedInscricao.socialMedia }}
+          </div>
+        </div>
+
+        <!-- Contato de Emergência -->
+        <div class="detail-section">
+          <h3>Contato de Emergência</h3>
+          <div class="detail-item">
+            <strong>Nome:</strong> {{ selectedInscricao.emergencyContactName }}
+          </div>
+          <div class="detail-item">
+            <strong>Telefone:</strong> {{ selectedInscricao.emergencyContactPhone }}
+          </div>
+          <div class="detail-item">
+            <strong>Relacionamento:</strong> {{ selectedInscricao.emergencyContactRelationship }}
+          </div>
+        </div>
+
+        <!-- Informações Religiosas -->
+        <div class="detail-section">
+          <h3>Informações Religiosas</h3>
+          <div class="detail-item">
+            <strong>Membro da Lagoinha:</strong> {{ selectedInscricao.isLagoinhaMember }}
+          </div>
+          <div class="detail-item">
+            <strong>Igreja:</strong> {{ selectedInscricao.churchName }}
+          </div>
+          <div class="detail-item">
+            <strong>Participação em Ministério:</strong> {{ selectedInscricao.ministryParticipation }}
+          </div>
+          <div class="detail-item">
+            <strong>Teste de Ministério:</strong> {{ selectedInscricao.hasMinistryTest }}
+          </div>
+          <div class="detail-item" *ngIf="selectedInscricao.ministryTestResults">
+            <strong>Resultados do Teste:</strong> {{ selectedInscricao.ministryTestResults }}
+          </div>
+        </div>
+
+        <!-- Informações do Acampamento -->
+        <div class="detail-section">
+          <h3>Informações do Acampamento</h3>
+          <div class="detail-item">
+            <strong>Lote:</strong> {{ selectedInscricao.registrationLot }}
+          </div>
+          <div class="detail-item">
+            <strong>Método de Pagamento:</strong> {{ selectedInscricao.paymentMethod }}
+          </div>
+          <div class="detail-item">
+            <strong>Tamanho da Camiseta:</strong> {{ selectedInscricao.shirtSize }}
+          </div>
+        </div>
+
+        <!-- Informações Médicas -->
+        <div class="detail-section">
+          <h3>Informações Médicas</h3>
+          <div class="detail-item">
+            <strong>Alergia:</strong> {{ selectedInscricao.hasAllergy }}
+          </div>
+          <div class="detail-item" *ngIf="selectedInscricao.allergyDetails">
+            <strong>Detalhes da Alergia:</strong> {{ selectedInscricao.allergyDetails }}
+          </div>
+          <div class="detail-item" *ngIf="selectedInscricao.usesMedication">
+            <strong>Usa Medicação:</strong> {{ selectedInscricao.usesMedication }}
+          </div>
+          <div class="detail-item" *ngIf="selectedInscricao.medicationDetails">
+            <strong>Detalhes da Medicação:</strong> {{ selectedInscricao.medicationDetails }}
+          </div>
+          <div class="detail-item">
+            <strong>Restrição Alimentar:</strong> {{ selectedInscricao.dietaryRestriction }}
+          </div>
+        </div>
+
+        <!-- Pedido de Oração -->
+        <div class="detail-section">
+          <h3>Pedido de Oração</h3>
+          <div class="detail-item">
+            <strong>Pedido:</strong> {{ selectedInscricao.prayerRequest }}
+          </div>
+        </div>
+
+        <!-- Autorizações -->
+        <div class="detail-section">
+          <h3>Autorizações</h3>
+          <div class="detail-item">
+            <strong>Autorização de Imagem:</strong> {{ formatarBoolean(selectedInscricao.imageAuthorization) }}
+          </div>
+          <div class="detail-item">
+            <strong>Ciência da Análise:</strong> {{ formatarBoolean(selectedInscricao.analysisAwareness) }}
+          </div>
+          <div class="detail-item">
+            <strong>Ciência dos Termos:</strong> {{ formatarBoolean(selectedInscricao.termsAwareness) }}
+          </div>
+          <div class="detail-item">
+            <strong>Declaração de Verdade:</strong> {{ formatarBoolean(selectedInscricao.truthDeclaration) }}
+          </div>
+        </div>
+
+        <!-- Informações do Sistema -->
+        <div class="detail-section">
+          <h3>Informações do Sistema</h3>
+          <div class="detail-item">
+            <strong>Status:</strong> 
+            <span class="status-badge" [ngClass]="getStatusClass(selectedInscricao.status)">
+              {{ selectedInscricao.status || 'pendente' }}
+            </span>
+          </div>
+          <div class="detail-item">
+            <strong>Data de Criação:</strong> {{ formatarDataCompleta(selectedInscricao.createdAt) }}
+          </div>
+          <div class="detail-item" *ngIf="selectedInscricao.updatedAt">
+            <strong>Última Atualização:</strong> {{ formatarDataCompleta(selectedInscricao.updatedAt) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

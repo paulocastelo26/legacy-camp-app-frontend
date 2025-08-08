@@ -359,6 +359,28 @@
   margin-top: 40px;
   border-top: 1px solid #222;
   box-shadow: 0 -2px 16px rgba(0,0,0,0.18);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.admin-link {
+  color: #666;
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.admin-link:hover {
+  opacity: 1;
+  color: #999;
 } 
 
 /* Remover estilos do carrossel */
