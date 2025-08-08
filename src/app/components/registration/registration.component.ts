@@ -285,7 +285,7 @@ export class RegistrationComponent {
   }
 
   copyPixKey() {
-    const pixKey = 'lgcymanaus@gmail.com';
+    const pixKey = 'pix.legacy.am@gmail.com';
     navigator.clipboard.writeText(pixKey).then(() => {
       this.pixKeyCopied = true;
       setTimeout(() => {
