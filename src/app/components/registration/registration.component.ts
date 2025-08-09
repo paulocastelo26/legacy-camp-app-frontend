@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { InscricaoService, Inscricao } from '../../services/inscricao.service';
+import { EmailService } from '../../services/email.service';
 
 @Component({
   selector: 'app-registration',
@@ -32,7 +33,8 @@ export class RegistrationComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private inscricaoService: InscricaoService
+    private inscricaoService: InscricaoService,
+    private emailService: EmailService
   ) {
     this.registrationForm = this.fb.group({
       // Informações Pessoais
@@ -203,6 +205,19 @@ export class RegistrationComponent {
       this.inscricaoService.criarInscricao(inscricao).subscribe({
         next: (response) => {
           console.log('Inscrição criada com sucesso:', response);
+          const inscricaoId = response?.id;
+
+          if (inscricaoId) {
+            this.emailService.sendPaymentInstructions(inscricaoId).subscribe({
+              next: () => {
+                console.log('Email de instruções de pagamento enviado.');
+              },
+              error: (emailErr) => {
+                console.error('Falha ao enviar email de instruções de pagamento:', emailErr);
+              }
+            });
+          }
+
           this.isSubmitting = false;
           this.showSuccessModal('Inscrição realizada com sucesso! Em breve entraremos em contato com mais informações e contrato.');
         },
