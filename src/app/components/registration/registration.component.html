@@ -293,7 +293,7 @@
             <label>Forma de pagamento utilizada *</label>
             <div class="radio-group">
               <label class="radio-option">
-                <input type="radio" formControlName="paymentMethod" value="pix" (change)="onPaymentMethodChange('pix')">
+                <input type="radio" formControlName="paymentMethod" value="pix">
                 <span class="radio-custom"></span>
                 PIX
               </label>
@@ -324,6 +324,29 @@
               accept="image/*,.pdf"
             >
             <small class="form-help">Opcional - Upload de imagem ou PDF</small>
+          </div>
+        </div>
+
+        <!-- Link de Pagamento -->
+        <div class="form-row" *ngIf="shouldShowPaymentLink()">
+          <div class="form-group full-width">
+            <div class="payment-link-container">
+              <p class="payment-info">
+                <strong>💳 Pagamento Online:</strong> Clique no botão abaixo para realizar o pagamento:
+              </p>
+              <button 
+                type="button" 
+                class="payment-button"
+                (click)="openPaymentLink()"
+              >
+                🚀 Pagar com Mercado Pago
+              </button>
+              <small class="form-help">
+                <strong>Valor:</strong> 
+                <span *ngIf="f['registrationLot'].value === 'lote1'">R$ 250,00</span>
+                <span *ngIf="f['registrationLot'].value === 'lote2'">R$ 300,00</span>
+              </small>
+            </div>
           </div>
         </div>
       </section>
@@ -631,51 +654,7 @@
   </div>
 </div>
 
-<!-- Modal do PIX -->
-<div class="modal-overlay" *ngIf="showPixModal" (click)="closePixModal()">
-  <div class="modal-content pix-modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h3>💳 Informações do PIX</h3>
-      <button class="modal-close" (click)="closePixModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="pix-info">
-        <div class="pix-icon">
-          <span>💳</span>
-        </div>
-        <h4>Chave PIX para Pagamento</h4>
-        <div class="pix-details">
-          <div class="pix-item">
-            <strong>Tipo de Chave:</strong>
-            <span>Email</span>
-          </div>
-          <div class="pix-item">
-            <strong>Chave PIX:</strong>
-            <span class="pix-key">{{pixKey}}</span>
-            <button class="copy-button" [class.copied]="pixKeyCopied" (click)="copyPixKey()">
-              <span *ngIf="!pixKeyCopied">📋</span>
-              <span *ngIf="pixKeyCopied">✓</span>
-              {{ pixKeyCopied ? 'Copiado!' : 'Copiar' }}
-            </button>
-          </div>
-          <div class="pix-item">
-            <strong>Beneficiário:</strong>
-            <span>Legacy AM</span>
-          </div>
-          <div class="pix-item">
-            <strong>Valor:</strong>
-            <span class="pix-value">{{ getPixValue() }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="modal-button" (click)="closePixModal()">
-        Entendi
-      </button>
-    </div>
-  </div>
-</div>
+
 
 <!-- Modal de Confirmação -->
 <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">

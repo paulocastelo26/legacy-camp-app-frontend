@@ -26,10 +26,6 @@ export class RegistrationComponent {
   modalType: 'success' | 'error' = 'success';
   modalButtonText = 'OK';
 
-  // Propriedades do modal PIX
-  showPixModal = false;
-  pixKeyCopied = false;
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -278,36 +274,33 @@ export class RegistrationComponent {
     }
   }
 
-  // Métodos do modal PIX
-  onPaymentMethodChange(method: string) {
-    if (method === 'pix') {
-      this.showPixModal = true;
-    }
-  }
-
-  closePixModal() {
-    this.showPixModal = false;
-  }
-
-  getPixValue(): string {
+  // Método para verificar se deve mostrar o link de pagamento
+  shouldShowPaymentLink(): boolean {
     const lot = this.registrationForm.get('registrationLot')?.value;
-    if (lot === 'lote1') {
-      return 'R$ 250,00';
-    } else if (lot === 'lote2') {
-      return 'R$ 300,00';
-    }
-    return 'R$ 300,00';
+    const paymentMethod = this.registrationForm.get('paymentMethod')?.value;
+    
+    // Mostra link apenas para PIX ou cartão de crédito, não para carnê
+    return (paymentMethod === 'pix' || paymentMethod === 'cartao') && (lot === 'lote1' || lot === 'lote2');
   }
 
-  copyPixKey() {
-    const pixKey = 'pix.legacy.am@gmail.com';
-    navigator.clipboard.writeText(pixKey).then(() => {
-      this.pixKeyCopied = true;
-      setTimeout(() => {
-        this.pixKeyCopied = false;
-      }, 2000);
-    }).catch(err => {
-      console.error('Erro ao copiar chave PIX:', err);
-    });
+  // Método para obter o link de pagamento correto
+  getPaymentLink(): string {
+    const lot = this.registrationForm.get('registrationLot')?.value;
+    
+    if (lot === 'lote1') {
+      return 'https://mpago.la/1KX5CeV';
+    } else if (lot === 'lote2') {
+      return 'https://mpago.la/22L9ag7';
+    }
+    
+    return '';
+  }
+
+  // Método para abrir o link de pagamento em nova aba
+  openPaymentLink() {
+    const link = this.getPaymentLink();
+    if (link) {
+      window.open(link, '_blank');
+    }
   }
 } 

@@ -17,15 +17,15 @@
       </div>
       <div class="stat-card">
         <h3>Pendentes</h3>
-        <p class="stat-number">{{ getInscricoesPorStatus('pendente') }}</p>
+        <p class="stat-number">{{ getInscricoesPorStatus('PENDENTE') }}</p>
       </div>
       <div class="stat-card">
         <h3>Aprovadas</h3>
-        <p class="stat-number">{{ getInscricoesPorStatus('aprovado') }}</p>
+        <p class="stat-number">{{ getInscricoesPorStatus('APROVADO') }}</p>
       </div>
       <div class="stat-card">
         <h3>Rejeitadas</h3>
-        <p class="stat-number">{{ getInscricoesPorStatus('rejeitado') }}</p>
+        <p class="stat-number">{{ getInscricoesPorStatus('REJEITADO') }}</p>
       </div>
     </div>
 
@@ -41,9 +41,9 @@
       <div class="status-filter">
         <select [(ngModel)]="statusFilter" class="status-select">
           <option value="">Todos os status</option>
-          <option value="pendente">Pendente</option>
-          <option value="aprovado">Aprovado</option>
-          <option value="rejeitado">Rejeitado</option>
+          <option value="PENDENTE">Pendente</option>
+          <option value="APROVADO">Aprovado</option>
+          <option value="REJEITADO">Rejeitado</option>
         </select>
       </div>
       <button class="refresh-button" (click)="carregarInscricoes()" [disabled]="isLoading">
@@ -70,6 +70,7 @@
               <th>Telefone</th>
               <th>Lote</th>
               <th>Status</th>
+              <th>Contrato</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -87,8 +88,17 @@
               <td>{{ inscricao.registrationLot }}</td>
               <td>
                 <span class="status-badge" [ngClass]="getStatusClass(inscricao.status)">
-                  {{ inscricao.status || 'pendente' }}
+                  {{ inscricao.status || 'PENDENTE' }}
                 </span>
+              </td>
+              <td>
+                <button 
+                  class="details-button" 
+                  (click)="enviarContrato(inscricao)"
+                  title="Enviar contrato por email"
+                >
+                  ✉️ Contrato
+                </button>
               </td>
               <td>
                 <div class="actions">
@@ -102,11 +112,11 @@
                   <select 
                     (change)="atualizarStatus(inscricao, $any($event.target).value)"
                     class="status-select-small"
-                    [value]="inscricao.status || 'pendente'"
+                    [value]="inscricao.status || 'PENDENTE'"
                   >
-                    <option value="pendente">Pendente</option>
-                    <option value="aprovado">Aprovado</option>
-                    <option value="rejeitado">Rejeitado</option>
+                    <option value="PENDENTE">PENDENTE</option>
+                    <option value="APROVADO">APROVADO</option>
+                    <option value="REJEITADO">REJEITADO</option>
                   </select>
                   <button 
                     class="delete-button" 

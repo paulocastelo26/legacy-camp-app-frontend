@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { InscricaoService, Inscricao } from '../../../services/inscricao.service';
+import { EmailService } from '../../../services/email.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -24,7 +25,8 @@ export class AdminDashboardComponent implements OnInit {
   constructor(
     private inscricaoService: InscricaoService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private emailService: EmailService
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +91,20 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  enviarContrato(inscricao: Inscricao): void {
+    if (!inscricao.id) {
+      alert('Inscrição sem ID.');
+      return;
+    }
+    this.emailService.sendContract(inscricao.id).subscribe({
+      next: () => alert('Contrato enviado com sucesso.'),
+      error: (error) => {
+        console.error('Erro ao enviar contrato:', error);
+        alert('Erro ao enviar contrato. Tente novamente.');
+      }
+    });
+  }
+
   removerInscricao(inscricao: Inscricao): void {
     if (confirm(`Tem certeza que deseja remover a inscrição de ${inscricao.fullName}?`)) {
       if (inscricao.id) {
@@ -118,9 +134,9 @@ export class AdminDashboardComponent implements OnInit {
 
   getStatusClass(status: string | undefined): string {
     switch (status) {
-      case 'aprovado': return 'status-aprovado';
-      case 'pendente': return 'status-pendente';
-      case 'rejeitado': return 'status-rejeitado';
+      case 'APROVADO': return 'status-aprovado';
+      case 'PENDENTE': return 'status-pendente';
+      case 'REJEITADO': return 'status-rejeitado';
       default: return 'status-pendente';
     }
   }
