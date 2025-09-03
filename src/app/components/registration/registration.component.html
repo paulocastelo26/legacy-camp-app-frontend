@@ -302,7 +302,7 @@
                 <span class="radio-custom"></span>
                 Cartão
               </label>
-              <label class="radio-option">
+              <label class="radio-option" *ngIf="shouldShowCarneOption()">
                 <input type="radio" formControlName="paymentMethod" value="carne">
                 <span class="radio-custom"></span>
                 Carnê Legacy
@@ -311,6 +311,9 @@
             <div class="error-message" *ngIf="submitted && f['paymentMethod'].errors">
               <span *ngIf="f['paymentMethod'].errors['required']">Selecione uma forma de pagamento</span>
             </div>
+            <small class="form-help" *ngIf="f['registrationLot'].value === 'lote1'">
+              💡 O 1º Lote é limitado e deve ser pago à vista (PIX ou Cartão)
+            </small>
           </div>
         </div>
 
@@ -327,25 +330,56 @@
           </div>
         </div>
 
-        <!-- Link de Pagamento -->
-        <div class="form-row" *ngIf="shouldShowPaymentLink()">
+        <!-- Informações de Pagamento -->
+        <div class="form-row" *ngIf="shouldShowPaymentInfo()">
           <div class="form-group full-width">
-            <div class="payment-link-container">
-              <p class="payment-info">
-                <strong>💳 Pagamento Online:</strong> Clique no botão abaixo para realizar o pagamento:
-              </p>
-              <button 
-                type="button" 
-                class="payment-button"
-                (click)="openPaymentLink()"
-              >
-                🚀 Pagar com Mercado Pago
-              </button>
-              <small class="form-help">
-                <strong>Valor:</strong> 
-                <span *ngIf="f['registrationLot'].value === 'lote1'">R$ 250,00</span>
-                <span *ngIf="f['registrationLot'].value === 'lote2'">R$ 300,00</span>
-              </small>
+            <div class="payment-info-container">
+              
+              <!-- Chave PIX -->
+              <div *ngIf="shouldShowPixKey()" class="pix-container">
+                <p class="payment-info">
+                  <strong>💳 Pagamento via PIX:</strong>
+                </p>
+                <div class="pix-key-container">
+                  <div class="pix-key-display">
+                    <span class="pix-key-label">Chave PIX:</span>
+                    <span class="pix-key-value">{{ pixKey }}</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    class="copy-button"
+                    (click)="copyPixKey()"
+                    title="Copiar chave PIX"
+                  >
+                    📋 Copiar
+                  </button>
+                </div>
+                <small class="form-help">
+                  <strong>Valor:</strong> 
+                  <span *ngIf="f['registrationLot'].value === 'lote1'">R$ 250,00</span>
+                  <span *ngIf="f['registrationLot'].value === 'lote2'">R$ 300,00</span>
+                </small>
+              </div>
+
+              <!-- Link Mercado Pago -->
+              <div *ngIf="shouldShowMercadoPagoLink()" class="mercado-pago-container">
+                <p class="payment-info">
+                  <strong>💳 Pagamento Online:</strong> Clique no botão abaixo para realizar o pagamento:
+                </p>
+                <button 
+                  type="button" 
+                  class="payment-button"
+                  (click)="openPaymentLink()"
+                >
+                  🚀 Pagar com Mercado Pago
+                </button>
+                <small class="form-help">
+                  <strong>Valor:</strong> 
+                  <span *ngIf="f['registrationLot'].value === 'lote1'">R$ 250,00 + Taxas</span>
+                  <span *ngIf="f['registrationLot'].value === 'lote2'">R$ 300,00 + Taxas</span>
+                </small>
+              </div>
+
             </div>
           </div>
         </div>

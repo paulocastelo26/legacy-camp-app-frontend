@@ -20,6 +20,14 @@
         <p class="stat-number">{{ getInscricoesPorStatus('PENDENTE') }}</p>
       </div>
       <div class="stat-card">
+        <h3>Parcial 01</h3>
+        <p class="stat-number">{{ getInscricoesPorStatus('PARCIAL_01') }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Parcial 02</h3>
+        <p class="stat-number">{{ getInscricoesPorStatus('PARCIAL_02') }}</p>
+      </div>
+      <div class="stat-card">
         <h3>Aprovadas</h3>
         <p class="stat-number">{{ getInscricoesPorStatus('APROVADO') }}</p>
       </div>
@@ -27,6 +35,29 @@
         <h3>Rejeitadas</h3>
         <p class="stat-number">{{ getInscricoesPorStatus('REJEITADO') }}</p>
       </div>
+    </div>
+
+    <div class="dashboard-stats secondary-stats">
+      <div class="stat-card">
+        <h3>1º Lote</h3>
+        <p class="stat-number">{{ getInscricoesPorLote('lote1') }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>2º Lote</h3>
+        <p class="stat-number">{{ getInscricoesPorLote('lote2') }}</p>
+      </div>
+      <!-- <div class="stat-card">
+        <h3>PIX</h3>
+        <p class="stat-number">{{ getInscricoesPorTipoPagamento('pix') }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Cartão</h3>
+        <p class="stat-number">{{ getInscricoesPorTipoPagamento('cartao') }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Carnê</h3>
+        <p class="stat-number">{{ getInscricoesPorTipoPagamento('carne') }}</p>
+      </div> -->
     </div>
 
     <div class="filters-section">
@@ -38,17 +69,47 @@
           class="search-input"
         >
       </div>
-      <div class="status-filter">
-        <select [(ngModel)]="statusFilter" class="status-select">
+      <div class="filter-group">
+        <select [(ngModel)]="statusFilter" class="filter-select">
           <option value="">Todos os status</option>
           <option value="PENDENTE">Pendente</option>
+          <option value="PARCIAL_01">Parcial 01</option>
+          <option value="PARCIAL_02">Parcial 02</option>
           <option value="APROVADO">Aprovado</option>
           <option value="REJEITADO">Rejeitado</option>
         </select>
       </div>
-      <button class="refresh-button" (click)="carregarInscricoes()" [disabled]="isLoading">
-        {{ isLoading ? 'Carregando...' : 'Atualizar' }}
-      </button>
+      <div class="filter-group">
+        <select [(ngModel)]="loteFilter" class="filter-select">
+          <option value="">Todos os lotes</option>
+          <option value="lote1">1º Lote - R$ 250,00</option>
+          <option value="lote2">2º Lote - R$ 300,00</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <select [(ngModel)]="paymentMethodFilter" class="filter-select">
+          <option value="">Todos os pagamentos</option>
+          <option value="pix">PIX</option>
+          <option value="cartao">Cartão</option>
+          <option value="carne">Carnê</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <select [(ngModel)]="itemsPerPage" (change)="alterarItensPorPagina(+$any($event.target).value)" class="filter-select">
+          <option value="5">5 por página</option>
+          <option value="10">10 por página</option>
+          <option value="20">20 por página</option>
+          <option value="50">50 por página</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="clear-filters-button" (click)="limparFiltros()">
+          🗑️ Limpar Filtros
+        </button>
+        <button class="refresh-button" (click)="carregarInscricoes()" [disabled]="isLoading">
+          {{ isLoading ? 'Carregando...' : 'Atualizar' }}
+        </button>
+      </div>
     </div>
 
     <div class="table-container">
@@ -70,7 +131,7 @@
               <th>Telefone</th>
               <th>Lote</th>
               <th>Status</th>
-              <th>Contrato</th>
+              <!-- <th>Contrato</th> -->
               <th>Ações</th>
             </tr>
           </thead>
@@ -91,7 +152,7 @@
                   {{ inscricao.status || 'PENDENTE' }}
                 </span>
               </td>
-              <td>
+              <!-- <td>
                 <button 
                   class="details-button" 
                   (click)="enviarContrato(inscricao)"
@@ -99,7 +160,7 @@
                 >
                   ✉️ Contrato
                 </button>
-              </td>
+              </td> -->
               <td>
                 <div class="actions">
                   <button 
@@ -113,10 +174,15 @@
                     (change)="atualizarStatus(inscricao, $any($event.target).value)"
                     class="status-select-small"
                     [value]="inscricao.status || 'PENDENTE'"
+                    [title]="getStatusDescription(inscricao.status || 'PENDENTE')"
                   >
-                    <option value="PENDENTE">PENDENTE</option>
-                    <option value="APROVADO">APROVADO</option>
-                    <option value="REJEITADO">REJEITADO</option>
+                    <option 
+                      *ngFor="let status of getStatusDisponiveis(inscricao.paymentMethod)" 
+                      [value]="status"
+                      [selected]="status === (inscricao.status || 'PENDENTE')"
+                    >
+                      {{ status }}
+                    </option>
                   </select>
                   <button 
                     class="delete-button" 
@@ -133,6 +199,47 @@
 
         <div *ngIf="inscricoesFiltradas.length === 0" class="no-results">
           <p>Nenhuma inscrição encontrada.</p>
+        </div>
+
+        <!-- Informações de paginação -->
+        <div *ngIf="totalInscricoesFiltradas > 0" class="pagination-info">
+          <p>
+            Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} a 
+            {{ Math.min(currentPage * itemsPerPage, totalInscricoesFiltradas) }} de 
+            {{ totalInscricoesFiltradas }} inscrições
+          </p>
+        </div>
+
+        <!-- Controles de paginação -->
+        <div *ngIf="totalPages > 1" class="pagination-controls">
+          <button 
+            class="pagination-button" 
+            (click)="paginaAnterior()" 
+            [disabled]="currentPage === 1"
+            title="Página anterior"
+          >
+            ← Anterior
+          </button>
+
+          <div class="pagination-numbers">
+            <button 
+              *ngFor="let pagina of paginasVisiveis" 
+              class="pagination-number" 
+              [class.active]="pagina === currentPage"
+              (click)="irParaPagina(pagina)"
+            >
+              {{ pagina }}
+            </button>
+          </div>
+
+          <button 
+            class="pagination-button" 
+            (click)="proximaPagina()" 
+            [disabled]="currentPage === totalPages"
+            title="Próxima página"
+          >
+            Próxima →
+          </button>
         </div>
       </div>
     </div>

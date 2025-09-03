@@ -19,8 +19,18 @@ export class AdminDashboardComponent implements OnInit {
   errorMessage: string = '';
   searchTerm: string = '';
   statusFilter: string = '';
+  loteFilter: string = '';
+  paymentMethodFilter: string = '';
   showDetailsModal: boolean = false;
   selectedInscricao: Inscricao | null = null;
+
+  // Propriedades de paginação
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalPages: number = 0;
+
+  // Propriedade para acessar Math no template
+  Math = Math;
 
   constructor(
     private inscricaoService: InscricaoService,
@@ -71,20 +81,84 @@ export class AdminDashboardComponent implements OnInit {
       );
     }
 
-    return filtradas;
+    if (this.loteFilter) {
+      filtradas = filtradas.filter(inscricao =>
+        inscricao.registrationLot === this.loteFilter
+      );
+    }
+
+    if (this.paymentMethodFilter) {
+      filtradas = filtradas.filter(inscricao =>
+        inscricao.paymentMethod === this.paymentMethodFilter
+      );
+    }
+
+    // Calcular total de páginas
+    this.totalPages = Math.ceil(filtradas.length / this.itemsPerPage);
+    
+    // Aplicar paginação
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    
+    return filtradas.slice(startIndex, endIndex);
+  }
+
+  get totalInscricoesFiltradas(): number {
+    let filtradas = this.inscricoes;
+
+    if (this.searchTerm) {
+      const termo = this.searchTerm.toLowerCase();
+      filtradas = filtradas.filter(inscricao =>
+        inscricao.fullName.toLowerCase().includes(termo) ||
+        inscricao.email.toLowerCase().includes(termo) ||
+        inscricao.phone.includes(termo)
+      );
+    }
+
+    if (this.statusFilter) {
+      filtradas = filtradas.filter(inscricao =>
+        inscricao.status === this.statusFilter
+      );
+    }
+
+    if (this.loteFilter) {
+      filtradas = filtradas.filter(inscricao =>
+        inscricao.registrationLot === this.loteFilter
+      );
+    }
+
+    if (this.paymentMethodFilter) {
+      filtradas = filtradas.filter(inscricao =>
+        inscricao.paymentMethod === this.paymentMethodFilter
+      );
+    }
+
+    return filtradas.length;
   }
 
   atualizarStatus(inscricao: Inscricao, novoStatus: string): void {
     if (inscricao.id) {
+      // Atualizar imediatamente na interface para feedback visual
+      const index = this.inscricoes.findIndex(i => i.id === inscricao.id);
+      if (index !== -1) {
+        this.inscricoes[index].status = novoStatus;
+      }
+
+      // Enviar para o servidor
       this.inscricaoService.atualizarStatus(inscricao.id, novoStatus).subscribe({
         next: (inscricaoAtualizada) => {
-          const index = this.inscricoes.findIndex(i => i.id === inscricao.id);
+          // Atualizar com dados completos do servidor
           if (index !== -1) {
-            this.inscricoes[index] = inscricaoAtualizada;
+            this.inscricoes[index] = { ...this.inscricoes[index], ...inscricaoAtualizada };
           }
+          console.log('Status atualizado no servidor:', novoStatus, 'para inscrição:', inscricao.fullName);
         },
         error: (error) => {
           console.error('Erro ao atualizar status:', error);
+          // Reverter mudança em caso de erro
+          if (index !== -1) {
+            this.inscricoes[index].status = inscricao.status; // Reverter para status anterior
+          }
           alert('Erro ao atualizar status. Tente novamente.');
         }
       });
@@ -134,15 +208,106 @@ export class AdminDashboardComponent implements OnInit {
 
   getStatusClass(status: string | undefined): string {
     switch (status) {
-      case 'APROVADO': return 'status-aprovado';
       case 'PENDENTE': return 'status-pendente';
+      case 'PARCIAL_01': return 'status-parcial-01';
+      case 'PARCIAL_02': return 'status-parcial-02';
+      case 'APROVADO': return 'status-aprovado';
       case 'REJEITADO': return 'status-rejeitado';
       default: return 'status-pendente';
     }
   }
 
+  // Método para obter status disponíveis baseado no método de pagamento
+  getStatusDisponiveis(paymentMethod: string): string[] {
+    if (paymentMethod === 'carne') {
+      return [
+        'PENDENTE',
+        'PARCIAL_01', 
+        'PARCIAL_02',
+        'APROVADO',
+        'REJEITADO'
+      ];
+    } else {
+      // PIX e Cartão - fluxo mais simples
+      return [
+        'PENDENTE',
+        'APROVADO',
+        'REJEITADO'
+      ];
+    }
+  }
+
+  // Método para obter descrição do status
+  getStatusDescription(status: string): string {
+    switch (status) {
+      case 'PENDENTE': return 'Aguardando análise';
+      case 'PARCIAL_01': return 'Pagou 1ª parcela do carnê';
+      case 'PARCIAL_02': return 'Pagou 2ª parcela do carnê';
+      case 'APROVADO': return 'Pagamento completo - Aprovado';
+      case 'REJEITADO': return 'Inscrição rejeitada';
+      default: return 'Status desconhecido';
+    }
+  }
+
   getInscricoesPorStatus(status: string): number {
     return this.inscricoes.filter(inscricao => inscricao.status === status).length;
+  }
+
+  getInscricoesPorLote(lote: string): number {
+    return this.inscricoes.filter(inscricao => inscricao.registrationLot === lote).length;
+  }
+
+  getInscricoesPorTipoPagamento(tipoPagamento: string): number {
+    return this.inscricoes.filter(inscricao => inscricao.paymentMethod === tipoPagamento).length;
+  }
+
+  limparFiltros(): void {
+    this.searchTerm = '';
+    this.statusFilter = '';
+    this.loteFilter = '';
+    this.paymentMethodFilter = '';
+    this.currentPage = 1; // Reset para primeira página
+  }
+
+  // Métodos de paginação
+  irParaPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPages) {
+      this.currentPage = pagina;
+    }
+  }
+
+  paginaAnterior(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  proximaPagina(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  alterarItensPorPagina(novoValor: number): void {
+    this.itemsPerPage = novoValor;
+    this.currentPage = 1; // Reset para primeira página
+  }
+
+  get paginasVisiveis(): number[] {
+    const paginas: number[] = [];
+    const maxVisiveis = 5;
+    let inicio = Math.max(1, this.currentPage - Math.floor(maxVisiveis / 2));
+    let fim = Math.min(this.totalPages, inicio + maxVisiveis - 1);
+    
+    if (fim - inicio + 1 < maxVisiveis) {
+      inicio = Math.max(1, fim - maxVisiveis + 1);
+    }
+    
+    for (let i = inicio; i <= fim; i++) {
+      paginas.push(i);
+    }
+    
+    return paginas;
   }
 
   abrirDetalhes(inscricao: Inscricao): void {

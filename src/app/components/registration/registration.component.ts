@@ -80,6 +80,9 @@ export class RegistrationComponent {
 
     // Adicionar validações condicionais
     this.setupConditionalValidations();
+    
+    // Adicionar validação para lote e método de pagamento
+    this.setupLotPaymentValidation();
   }
 
   setupConditionalValidations() {
@@ -129,6 +132,19 @@ export class RegistrationComponent {
         ministryTestResultsControl?.setValue('');
       }
       ministryTestResultsControl?.updateValueAndValidity();
+    });
+  }
+
+  setupLotPaymentValidation() {
+    // Validação condicional para método de pagamento baseado no lote
+    this.registrationForm.get('registrationLot')?.valueChanges.subscribe(lot => {
+      const paymentMethodControl = this.registrationForm.get('paymentMethod');
+      const currentPaymentMethod = paymentMethodControl?.value;
+      
+      // Se mudou para 1º lote e estava selecionado carnê, limpar seleção
+      if (lot === 'lote1' && currentPaymentMethod === 'carne') {
+        paymentMethodControl?.setValue('');
+      }
     });
   }
 
@@ -274,13 +290,25 @@ export class RegistrationComponent {
     }
   }
 
-  // Método para verificar se deve mostrar o link de pagamento
-  shouldShowPaymentLink(): boolean {
+  // Método para verificar se deve mostrar informações de pagamento
+  shouldShowPaymentInfo(): boolean {
     const lot = this.registrationForm.get('registrationLot')?.value;
     const paymentMethod = this.registrationForm.get('paymentMethod')?.value;
     
-    // Mostra link apenas para PIX ou cartão de crédito, não para carnê
+    // Mostra informações apenas para PIX ou cartão de crédito, não para carnê
     return (paymentMethod === 'pix' || paymentMethod === 'cartao') && (lot === 'lote1' || lot === 'lote2');
+  }
+
+  // Método para verificar se deve mostrar chave PIX
+  shouldShowPixKey(): boolean {
+    const paymentMethod = this.registrationForm.get('paymentMethod')?.value;
+    return paymentMethod === 'pix';
+  }
+
+  // Método para verificar se deve mostrar link do Mercado Pago
+  shouldShowMercadoPagoLink(): boolean {
+    const paymentMethod = this.registrationForm.get('paymentMethod')?.value;
+    return paymentMethod === 'cartao';
   }
 
   // Método para obter o link de pagamento correto
@@ -288,7 +316,7 @@ export class RegistrationComponent {
     const lot = this.registrationForm.get('registrationLot')?.value;
     
     if (lot === 'lote1') {
-      return 'https://mpago.la/1KX5CeV';
+      return 'https://mpago.la/1W4jnL2';
     } else if (lot === 'lote2') {
       return 'https://mpago.la/22L9ag7';
     }
@@ -302,5 +330,22 @@ export class RegistrationComponent {
     if (link) {
       window.open(link, '_blank');
     }
+  }
+
+  // Método para copiar chave PIX
+  copyPixKey() {
+    navigator.clipboard.writeText(this.pixKey).then(() => {
+      // Aqui você pode adicionar uma notificação de sucesso se desejar
+      console.log('Chave PIX copiada para a área de transferência');
+    }).catch(err => {
+      console.error('Erro ao copiar chave PIX:', err);
+    });
+  }
+
+  // Método para verificar se deve mostrar opção de carnê
+  shouldShowCarneOption(): boolean {
+    const lot = this.registrationForm.get('registrationLot')?.value;
+    // Carnê só disponível para o 2º lote
+    return lot === 'lote2';
   }
 } 

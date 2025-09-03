@@ -888,4 +888,129 @@
   .payment-info {
     font-size: 1rem;
   }
+}
+
+/* Estilos para informações de pagamento */
+.payment-info-container {
+  background: rgba(1, 63, 14, 0.1);
+  border: 2px solid #013f0e;
+  border-radius: 15px;
+  padding: 25px;
+  margin-top: 20px;
+}
+
+.pix-container {
+  text-align: center;
+}
+
+.pix-key-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+
+.pix-key-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.pix-key-label {
+  color: #888;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.pix-key-value {
+  color: #013f0e;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 1rem;
+  background: rgba(1, 63, 14, 0.1);
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid #013f0e;
+  word-break: break-all;
+}
+
+.copy-button {
+  background: rgba(1, 63, 14, 0.2);
+  border: 1px solid #013f0e;
+  color: #013f0e;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  min-width: 100px;
+  justify-content: center;
+}
+
+.copy-button:hover {
+  background: rgba(1, 63, 14, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(1, 63, 14, 0.2);
+}
+
+.copy-button:active {
+  transform: translateY(0);
+  background: rgba(1, 63, 14, 0.4);
+}
+
+.mercado-pago-container {
+  text-align: center;
+}
+
+/* Responsividade para informações de pagamento */
+@media (max-width: 768px) {
+  .pix-key-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .pix-key-display {
+    min-width: auto;
+    align-items: center;
+  }
+  
+  .copy-button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-info-container {
+    padding: 20px 15px;
+  }
+  
+  .pix-key-container {
+    padding: 12px;
+  }
+  
+  .pix-key-value {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+  
+  .copy-button {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
 } 
