@@ -54,7 +54,7 @@ export class RegistrationComponent {
       ministryParticipation: [''],
 
       // Informações da Inscrição
-      registrationLot: ['', [Validators.required]],
+      registrationLot: ['lote2', [Validators.required]],
       paymentMethod: ['', [Validators.required]],
       paymentProof: [''],
 
@@ -141,10 +141,8 @@ export class RegistrationComponent {
       const paymentMethodControl = this.registrationForm.get('paymentMethod');
       const currentPaymentMethod = paymentMethodControl?.value;
       
-      // Se mudou para 1º lote e estava selecionado carnê, limpar seleção
-      if (lot === 'lote1' && currentPaymentMethod === 'carne') {
-        paymentMethodControl?.setValue('');
-      }
+      // Como agora só temos 2º lote, não precisamos de validação especial
+      // O carnê está sempre disponível para o 2º lote
     });
   }
 
@@ -292,11 +290,10 @@ export class RegistrationComponent {
 
   // Método para verificar se deve mostrar informações de pagamento
   shouldShowPaymentInfo(): boolean {
-    const lot = this.registrationForm.get('registrationLot')?.value;
     const paymentMethod = this.registrationForm.get('paymentMethod')?.value;
     
     // Mostra informações apenas para PIX ou cartão de crédito, não para carnê
-    return (paymentMethod === 'pix' || paymentMethod === 'cartao') && (lot === 'lote1' || lot === 'lote2');
+    return (paymentMethod === 'pix' || paymentMethod === 'cartao');
   }
 
   // Método para verificar se deve mostrar chave PIX
@@ -313,15 +310,8 @@ export class RegistrationComponent {
 
   // Método para obter o link de pagamento correto
   getPaymentLink(): string {
-    const lot = this.registrationForm.get('registrationLot')?.value;
-    
-    if (lot === 'lote1') {
-      return 'https://mpago.la/1W4jnL2';
-    } else if (lot === 'lote2') {
-      return 'https://mpago.la/22L9ag7';
-    }
-    
-    return '';
+    // Como agora só temos 2º lote, sempre retorna o link do 2º lote
+    return 'https://mpago.la/22L9ag7';
   }
 
   // Método para abrir o link de pagamento em nova aba
@@ -344,8 +334,7 @@ export class RegistrationComponent {
 
   // Método para verificar se deve mostrar opção de carnê
   shouldShowCarneOption(): boolean {
-    const lot = this.registrationForm.get('registrationLot')?.value;
-    // Carnê só disponível para o 2º lote
-    return lot === 'lote2';
+    // Carnê sempre disponível agora que só temos 2º lote
+    return true;
   }
 } 

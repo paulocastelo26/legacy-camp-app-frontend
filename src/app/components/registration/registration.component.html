@@ -268,23 +268,18 @@
         
         <div class="form-row">
           <div class="form-group">
-            <label>Selecione o lote da sua inscrição *</label>
+            <label>Lote da inscrição</label>
             <div class="radio-group">
               <label class="radio-option">
-                <input type="radio" formControlName="registrationLot" value="lote1">
-                <span class="radio-custom"></span>
-                1º Lote – R$ 250,00 (100% a vista, e LIMITADO)
-              </label>
-              <label class="radio-option">
-                <input type="radio" formControlName="registrationLot" value="lote2">
+                <input type="radio" formControlName="registrationLot" value="lote2" checked>
                 <span class="radio-custom"></span>
                 2º Lote – R$ 300,00 (Podendo ser a vista ou parcelado)
               </label>
             </div>
-            <div class="error-message" *ngIf="submitted && f['registrationLot'].errors">
-              <span *ngIf="f['registrationLot'].errors['required']">Selecione um lote</span>
+            <small class="form-help">Inclui transporte, alimentação e camisa.</small>
+            <div class="info-box" style="margin-top: 10px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #007bff; border-radius: 4px; color: #333;">
+              <p style="color: #333; margin: 0;"><strong>📢 Aviso:</strong> As inscrições do 1º lote foram encerradas. Apenas o 2º lote está disponível.</p>
             </div>
-            <small class="form-help">Ambos os lotes incluem transporte, alimentação e camisa.</small>
         </div>
       </div>
 
@@ -311,8 +306,8 @@
             <div class="error-message" *ngIf="submitted && f['paymentMethod'].errors">
               <span *ngIf="f['paymentMethod'].errors['required']">Selecione uma forma de pagamento</span>
             </div>
-            <small class="form-help" *ngIf="f['registrationLot'].value === 'lote1'">
-              💡 O 1º Lote é limitado e deve ser pago à vista (PIX ou Cartão)
+            <small class="form-help">
+              💡 O 2º Lote pode ser pago à vista (PIX ou Cartão) ou parcelado (Carnê Legacy)
             </small>
           </div>
         </div>
@@ -355,9 +350,7 @@
                   </button>
                 </div>
                 <small class="form-help">
-                  <strong>Valor:</strong> 
-                  <span *ngIf="f['registrationLot'].value === 'lote1'">R$ 250,00</span>
-                  <span *ngIf="f['registrationLot'].value === 'lote2'">R$ 300,00</span>
+                  <strong>Valor:</strong> R$ 300,00
                 </small>
               </div>
 
@@ -374,9 +367,7 @@
                   🚀 Pagar com Mercado Pago
                 </button>
                 <small class="form-help">
-                  <strong>Valor:</strong> 
-                  <span *ngIf="f['registrationLot'].value === 'lote1'">R$ 250,00 + Taxas</span>
-                  <span *ngIf="f['registrationLot'].value === 'lote2'">R$ 300,00 + Taxas</span>
+                  <strong>Valor:</strong> R$ 300,00 + Taxas
                 </small>
               </div>
 
