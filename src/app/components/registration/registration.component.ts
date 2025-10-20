@@ -19,12 +19,22 @@ export class RegistrationComponent {
 
   pixKey = 'pix.legacy.am@gmail.com';
 
+  // Propriedades do cupom
+  couponValidated = false;
+  couponDiscount = 0;
+  couponMessage = '';
+  validCoupons = ['LGCYBV200', 'LGCYITA200', 'LGCYSTAFF']; // Cupons válidos
+
   // Propriedades do modal
   showModal = false;
   modalTitle = '';
   modalMessage = '';
   modalType: 'success' | 'error' = 'success';
   modalButtonText = 'OK';
+
+  // Propriedades do modal de termos
+  showTermsModal = false;
+  termsAccepted = false;
 
   constructor(
     private fb: FormBuilder,
@@ -57,6 +67,7 @@ export class RegistrationComponent {
       registrationLot: ['lote2', [Validators.required]],
       paymentMethod: ['', [Validators.required]],
       paymentProof: [''],
+      couponCode: [''],
 
       // Informações Adicionais
       shirtSize: ['', [Validators.required]],
@@ -67,8 +78,6 @@ export class RegistrationComponent {
       dietaryRestriction: ['Nenhuma'],
 
       // Enfoque e Cuidado
-      hasMinistryTest: ['', [Validators.required]],
-      ministryTestResults: [''],
       prayerRequest: ['', [Validators.required]],
 
       // Termos e Autorização
@@ -122,17 +131,6 @@ export class RegistrationComponent {
       medicationDetailsControl?.updateValueAndValidity();
     });
 
-    // Validação condicional para ministryTestResults
-    this.registrationForm.get('hasMinistryTest')?.valueChanges.subscribe(value => {
-      const ministryTestResultsControl = this.registrationForm.get('ministryTestResults');
-      if (value === 'sim') {
-        ministryTestResultsControl?.setValidators([Validators.required]);
-      } else {
-        ministryTestResultsControl?.clearValidators();
-        ministryTestResultsControl?.setValue('');
-      }
-      ministryTestResultsControl?.updateValueAndValidity();
-    });
   }
 
   setupLotPaymentValidation() {
@@ -143,6 +141,17 @@ export class RegistrationComponent {
       
       // Como agora só temos 2º lote, não precisamos de validação especial
       // O carnê está sempre disponível para o 2º lote
+    });
+
+    // Limpar cupom quando método de pagamento mudar
+    this.registrationForm.get('paymentMethod')?.valueChanges.subscribe(paymentMethod => {
+      if (paymentMethod === 'carne') {
+        // Limpar cupom quando selecionar carnê
+        this.registrationForm.patchValue({ couponCode: '' });
+        this.couponValidated = false;
+        this.couponDiscount = 0;
+        this.couponMessage = '';
+      }
     });
   }
 
@@ -196,14 +205,15 @@ export class RegistrationComponent {
         registrationLot: formData.registrationLot,
         paymentMethod: formData.paymentMethod,
         paymentProof: formData.paymentProof,
+        couponCode: formData.couponCode,
         shirtSize: formData.shirtSize,
         hasAllergy: formData.hasAllergy,
         allergyDetails: formData.allergyDetails,
         usesMedication: formData.usesMedication,
         medicationDetails: formData.medicationDetails,
         dietaryRestriction: formData.dietaryRestriction,
-        hasMinistryTest: formData.hasMinistryTest,
-        ministryTestResults: formData.ministryTestResults,
+        hasMinistryTest: 'nao', // Valor fixo: não fez o teste
+        ministryTestResults: '', // Valor vazio já que não fez o teste
         prayerRequest: formData.prayerRequest,
         imageAuthorization: formData.imageAuthorization,
         analysisAwareness: formData.analysisAwareness,
@@ -288,12 +298,34 @@ export class RegistrationComponent {
     }
   }
 
+  // Métodos do modal de termos
+  openTermsModal() {
+    this.showTermsModal = true;
+  }
+
+  closeTermsModal() {
+    this.showTermsModal = false;
+    this.termsAccepted = false;
+  }
+
+  acceptTerms() {
+    this.termsAccepted = true;
+    this.showTermsModal = false;
+    // Marcar o campo termsAwareness como aceito
+    this.registrationForm.patchValue({ termsAwareness: true });
+  }
+
+  // Método para verificar se pode submeter o formulário
+  canSubmitForm(): boolean {
+    return this.termsAccepted && this.registrationForm.get('termsAwareness')?.value;
+  }
+
   // Método para verificar se deve mostrar informações de pagamento
   shouldShowPaymentInfo(): boolean {
     const paymentMethod = this.registrationForm.get('paymentMethod')?.value;
     
-    // Mostra informações apenas para PIX ou cartão de crédito, não para carnê
-    return (paymentMethod === 'pix' || paymentMethod === 'cartao');
+    // Mostra informações para PIX, cartão de crédito ou quando há cupom validado
+    return (paymentMethod === 'pix' || paymentMethod === 'cartao' || this.couponValidated);
   }
 
   // Método para verificar se deve mostrar chave PIX
@@ -310,8 +342,18 @@ export class RegistrationComponent {
 
   // Método para obter o link de pagamento correto
   getPaymentLink(): string {
-    // Como agora só temos 2º lote, sempre retorna o link do 2º lote
-    return 'https://mpago.la/22L9ag7';
+    const paymentMethod = this.registrationForm.get('paymentMethod')?.value;
+    
+    if (paymentMethod === 'cartao' && this.couponValidated) {
+      // Link do Mercado Pago para pagamento com cupom (R$ 200,00)
+      return 'https://mpago.la/33Mse1F';
+    } else if (paymentMethod === 'cartao' && !this.couponValidated) {
+      // Link do Mercado Pago para pagamento normal (R$ 300,00)
+      // TODO: Adicionar link para pagamento sem cupom quando disponível
+      return 'https://mpago.la/22L9ag7';
+    }
+    
+    return '';
   }
 
   // Método para abrir o link de pagamento em nova aba
@@ -336,5 +378,39 @@ export class RegistrationComponent {
   shouldShowCarneOption(): boolean {
     // Carnê sempre disponível agora que só temos 2º lote
     return true;
+  }
+
+  // Método para validar cupom
+  validateCoupon() {
+    const couponCode = this.registrationForm.get('couponCode')?.value?.toUpperCase().trim();
+    
+    if (!couponCode) {
+      this.couponMessage = 'Digite um código de cupom';
+      this.couponValidated = false;
+      this.couponDiscount = 0;
+      return;
+    }
+
+    if (this.validCoupons.includes(couponCode)) {
+      this.couponValidated = true;
+      this.couponDiscount = 100; // R$ 100 de desconto (de R$ 300 para R$ 200)
+      this.couponMessage = `Cupom válido! Desconto aplicado. Valor final: R$ ${this.getFinalValue()},00.`;
+    } else {
+      this.couponValidated = false;
+      this.couponDiscount = 0;
+      this.couponMessage = 'Cupom inválido. Verifique o código e tente novamente.';
+    }
+  }
+
+  // Método para verificar se deve mostrar campo de cupom
+  shouldShowCouponField(): boolean {
+    const paymentMethod = this.registrationForm.get('paymentMethod')?.value;
+    return paymentMethod === 'cartao_cupom';
+  }
+
+  // Método para obter o valor final com desconto
+  getFinalValue(): number {
+    const baseValue = 300;
+    return baseValue - this.couponDiscount;
   }
 } 

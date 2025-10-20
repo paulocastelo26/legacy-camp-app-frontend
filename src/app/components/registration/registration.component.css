@@ -316,6 +316,21 @@
   text-align: center;
 }
 
+.terms-warning {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(61, 11, 4, 0.1);
+  border: 1px solid #3d0b04;
+  border-radius: 10px;
+  color: #3d0b04;
+}
+
+.terms-warning p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
 .submit-button {
   background: linear-gradient(145deg, #3d0b04, #5a1a0a, #3d0b04);
   color: #FFF;
@@ -862,6 +877,20 @@
   transform: translateY(0);
 }
 
+.payment-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  background: linear-gradient(135deg, #666, #555);
+  box-shadow: none;
+}
+
+.payment-button:disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background: linear-gradient(135deg, #666, #555);
+}
+
 .payment-link-container .form-help {
   color: #013f0e;
   font-weight: 500;
@@ -1012,5 +1041,322 @@
   .copy-button {
     padding: 8px 12px;
     font-size: 0.85rem;
+  }
+}
+
+/* Estilos do Cupom */
+.coupon-container {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.coupon-input {
+  flex: 1;
+  padding: 15px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #111;
+  color: #FFF;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.coupon-input:focus {
+  outline: none;
+  border-color: #013f0e;
+  box-shadow: 0 0 0 3px rgba(1, 63, 14, 0.1);
+  background: #1a1a1a;
+}
+
+.coupon-input::placeholder {
+  color: #666;
+}
+
+.coupon-input.success {
+  border-color: #013f0e;
+  background-color: rgba(1, 63, 14, 0.1);
+  color: #013f0e;
+}
+
+.coupon-input.error {
+  border-color: #3d0b04;
+  background-color: rgba(61, 11, 4, 0.1);
+  color: #3d0b04;
+}
+
+.coupon-button {
+  background: linear-gradient(145deg, #013f0e, #025a1a);
+  color: #FFF;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 8px rgba(1, 63, 14, 0.3);
+  border: 1px solid #013f0e;
+}
+
+.coupon-button:hover {
+  background: linear-gradient(145deg, #025a1a, #013f0e);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(1, 63, 14, 0.4);
+}
+
+.coupon-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(1, 63, 14, 0.3);
+}
+
+.coupon-message {
+  margin-top: 10px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.coupon-message.success {
+  background-color: rgba(1, 63, 14, 0.1);
+  color: #013f0e;
+  border-color: #013f0e;
+}
+
+.coupon-message.error {
+  background-color: rgba(61, 11, 4, 0.1);
+  color: #3d0b04;
+  border-color: #3d0b04;
+}
+
+/* Responsividade para cupom */
+@media (max-width: 768px) {
+  .coupon-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .coupon-button {
+    width: 100%;
+    padding: 12px 20px;
+  }
+  
+  .coupon-input {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Estilos para link de termos */
+.terms-link-container {
+  margin-top: 10px;
+  margin-left: 32px; /* Alinha com o texto do checkbox */
+}
+
+.terms-link {
+  background: linear-gradient(145deg, #013f0e, #025a1a);
+  border: 1px solid #013f0e;
+  color: #FFF;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(1, 63, 14, 0.2);
+}
+
+.terms-link:hover {
+  background: linear-gradient(145deg, #025a1a, #013f0e);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(1, 63, 14, 0.3);
+}
+
+/* Estilos específicos do Modal de Termos */
+.terms-modal {
+  max-width: 800px;
+  width: 95%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.terms-modal .modal-header {
+  background: linear-gradient(135deg, #013f0e, #025a1a);
+  border-bottom: 1px solid #013f0e;
+}
+
+.terms-modal .modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  max-height: 60vh;
+}
+
+.terms-content {
+  padding: 25px;
+  color: #FFF;
+  line-height: 1.6;
+}
+
+.terms-section {
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.terms-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.terms-section h4 {
+  color: #013f0e;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terms-section h4::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: #013f0e;
+  border-radius: 2px;
+}
+
+.terms-section p {
+  margin-bottom: 12px;
+  color: #FFF;
+  font-size: 0.95rem;
+}
+
+.terms-section ul {
+  margin: 12px 0;
+  padding-left: 20px;
+  color: #FFF;
+}
+
+.terms-section li {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.terms-section strong {
+  color: #013f0e;
+  font-weight: 600;
+}
+
+.terms-modal .modal-footer {
+  background: #111;
+  border-top: 1px solid #333;
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.terms-modal .modal-footer .modal-button {
+  min-width: 120px;
+}
+
+.cancel-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #666;
+  color: #FFF;
+}
+
+.cancel-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #888;
+}
+
+.accept-button {
+  background: linear-gradient(145deg, #013f0e, #025a1a);
+  border: 1px solid #013f0e;
+  color: #FFF;
+}
+
+.accept-button:hover {
+  background: linear-gradient(145deg, #025a1a, #013f0e);
+  box-shadow: 0 8px 15px rgba(1, 63, 14, 0.4);
+}
+
+/* Responsividade para modal de termos */
+@media (max-width: 768px) {
+  .terms-modal {
+    width: 98%;
+    max-height: 95vh;
+    margin: 10px;
+  }
+  
+  .terms-content {
+    padding: 20px;
+  }
+  
+  .terms-section h4 {
+    font-size: 1.1rem;
+  }
+  
+  .terms-section p,
+  .terms-section li {
+    font-size: 0.9rem;
+  }
+  
+  .terms-modal .modal-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .terms-modal .modal-footer .modal-button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .terms-modal {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    margin: 0;
+  }
+  
+  .terms-content {
+    padding: 15px;
+  }
+  
+  .terms-section {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+  }
+  
+  .terms-section h4 {
+    font-size: 1rem;
+  }
+  
+  .terms-section p,
+  .terms-section li {
+    font-size: 0.85rem;
+  }
+  
+  .terms-link-container {
+    margin-left: 20px;
+  }
+  
+  .terms-link {
+    font-size: 0.85rem;
+    padding: 6px 12px;
   }
 } 

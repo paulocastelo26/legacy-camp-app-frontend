@@ -21,6 +21,7 @@ export interface Inscricao {
   registrationLot: string;
   paymentMethod: string;
   paymentProof?: string;
+  couponCode?: string;
   shirtSize: string;
   hasAllergy: string;
   allergyDetails?: string;

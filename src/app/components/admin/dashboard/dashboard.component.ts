@@ -211,6 +211,8 @@ export class AdminDashboardComponent implements OnInit {
       case 'PENDENTE': return 'status-pendente';
       case 'PARCIAL_01': return 'status-parcial-01';
       case 'PARCIAL_02': return 'status-parcial-02';
+      case 'PARCIAL_03': return 'status-parcial-03';
+      case 'PARCIAL_04': return 'status-parcial-04';
       case 'APROVADO': return 'status-aprovado';
       case 'REJEITADO': return 'status-rejeitado';
       default: return 'status-pendente';
@@ -224,6 +226,8 @@ export class AdminDashboardComponent implements OnInit {
         'PENDENTE',
         'PARCIAL_01', 
         'PARCIAL_02',
+        'PARCIAL_03',
+        'PARCIAL_04',
         'APROVADO',
         'REJEITADO'
       ];
