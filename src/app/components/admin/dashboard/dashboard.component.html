@@ -55,17 +55,20 @@
         <p class="stat-number">{{ getInscricoesPorLote('lote2') }}</p>
       </div>
       <!-- <div class="stat-card">
-        <h3>PIX</h3>
-        <p class="stat-number">{{ getInscricoesPorTipoPagamento('pix') }}</p>
+        <h3>Sem Cupom</h3>
+        <p class="stat-number">{{ getInscricoesPorCupom('sem_cupom') }}</p>
       </div>
       <div class="stat-card">
-        <h3>Cartão</h3>
-        <p class="stat-number">{{ getInscricoesPorTipoPagamento('cartao') }}</p>
-      </div>
-      <div class="stat-card">
-        <h3>Carnê</h3>
-        <p class="stat-number">{{ getInscricoesPorTipoPagamento('carne') }}</p>
+        <h3>Com Cupom</h3>
+        <p class="stat-number">{{ inscricoes.length - getInscricoesPorCupom('sem_cupom') }}</p>
       </div> -->
+    </div>
+
+    <div class="dashboard-stats coupon-stats">
+      <div class="stat-card" *ngFor="let cupom of getCuponsUnicos()">
+        <h3>Cupom {{ cupom }}</h3>
+        <p class="stat-number">{{ getInscricoesPorCupom(cupom) }}</p>
+      </div>
     </div>
 
     <div class="filters-section">
@@ -105,6 +108,15 @@
         </select>
       </div>
       <div class="filter-group">
+        <select [(ngModel)]="couponFilter" class="filter-select">
+          <option value="">Todos</option>
+          <option value="sem_cupom">Sem Cupom</option>
+          <option *ngFor="let cupom of getCuponsUnicos()" [value]="cupom">
+            {{ cupom }}
+          </option>
+        </select>
+      </div>
+      <div class="filter-group">
         <select [(ngModel)]="itemsPerPage" (change)="alterarItensPorPagina(+$any($event.target).value)" class="filter-select">
           <option value="5">5 por página</option>
           <option value="10">10 por página</option>
@@ -140,6 +152,7 @@
               <th>Email</th>
               <th>Telefone</th>
               <th>Lote</th>
+              <th>Cupom</th>
               <th>Status</th>
               <!-- <th>Contrato</th> -->
               <th>Ações</th>
@@ -157,6 +170,11 @@
               <td>{{ inscricao.email }}</td>
               <td>{{ inscricao.phone }}</td>
               <td>{{ inscricao.registrationLot }}</td>
+              <td>
+                <span class="cupom-badge" [ngClass]="getCupomBadgeClass(inscricao.couponCode)">
+                  {{ formatarCupom(inscricao.couponCode) }}
+                </span>
+              </td>
               <td>
                 <span class="status-badge" [ngClass]="getStatusClass(inscricao.status)">
                   {{ inscricao.status || 'PENDENTE' }}
@@ -337,6 +355,12 @@
           </div>
           <div class="detail-item">
             <strong>Método de Pagamento:</strong> {{ selectedInscricao.paymentMethod }}
+          </div>
+          <div class="detail-item">
+            <strong>Cupom Utilizado:</strong> 
+            <span class="cupom-badge" [ngClass]="getCupomBadgeClass(selectedInscricao.couponCode)">
+              {{ formatarCupom(selectedInscricao.couponCode) }}
+            </span>
           </div>
           <div class="detail-item">
             <strong>Tamanho da Camiseta:</strong> {{ selectedInscricao.shirtSize }}

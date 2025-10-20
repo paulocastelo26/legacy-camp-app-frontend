@@ -21,6 +21,7 @@ export class AdminDashboardComponent implements OnInit {
   statusFilter: string = '';
   loteFilter: string = '';
   paymentMethodFilter: string = '';
+  couponFilter: string = '';
   showDetailsModal: boolean = false;
   selectedInscricao: Inscricao | null = null;
 
@@ -49,22 +50,22 @@ export class AdminDashboardComponent implements OnInit {
 
     this.inscricaoService.listarInscricoes().subscribe({
       next: (data) => {
-        this.inscricoes = data;
-
-        console.log(this.inscricoes)
-        
+        console.log('Dados recebidos:', data);
+        this.inscricoes = data || [];
+        console.log('Inscrições carregadas:', this.inscricoes.length);
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Erro ao carregar inscrições:', error);
         this.errorMessage = 'Erro ao carregar inscrições. Tente novamente.';
         this.isLoading = false;
+        this.inscricoes = []; // Garantir que a lista esteja vazia em caso de erro
       }
     });
   }
 
   get inscricoesFiltradas(): Inscricao[] {
-    let filtradas = this.inscricoes;
+    let filtradas = this.inscricoes || [];
 
     if (this.searchTerm) {
       const termo = this.searchTerm.toLowerCase();
@@ -91,6 +92,18 @@ export class AdminDashboardComponent implements OnInit {
       filtradas = filtradas.filter(inscricao =>
         inscricao.paymentMethod === this.paymentMethodFilter
       );
+    }
+
+    if (this.couponFilter) {
+      if (this.couponFilter === 'sem_cupom') {
+        filtradas = filtradas.filter(inscricao =>
+          !inscricao.couponCode || inscricao.couponCode.trim() === ''
+        );
+      } else {
+        filtradas = filtradas.filter(inscricao =>
+          inscricao.couponCode && inscricao.couponCode === this.couponFilter
+        );
+      }
     }
 
     // Calcular total de páginas
@@ -131,6 +144,18 @@ export class AdminDashboardComponent implements OnInit {
       filtradas = filtradas.filter(inscricao =>
         inscricao.paymentMethod === this.paymentMethodFilter
       );
+    }
+
+    if (this.couponFilter) {
+      if (this.couponFilter === 'sem_cupom') {
+        filtradas = filtradas.filter(inscricao =>
+          !inscricao.couponCode || inscricao.couponCode.trim() === ''
+        );
+      } else {
+        filtradas = filtradas.filter(inscricao =>
+          inscricao.couponCode && inscricao.couponCode === this.couponFilter
+        );
+      }
     }
 
     return filtradas.length;
@@ -265,11 +290,62 @@ export class AdminDashboardComponent implements OnInit {
     return this.inscricoes.filter(inscricao => inscricao.paymentMethod === tipoPagamento).length;
   }
 
+  getInscricoesPorCupom(cupom: string): number {
+    if (!this.inscricoes || this.inscricoes.length === 0) {
+      return 0;
+    }
+    
+    if (cupom === 'sem_cupom') {
+      return this.inscricoes.filter(inscricao => 
+        !inscricao.couponCode || inscricao.couponCode.trim() === ''
+      ).length;
+    }
+    return this.inscricoes.filter(inscricao => inscricao.couponCode && inscricao.couponCode === cupom).length;
+  }
+
+  getCuponsUnicos(): string[] {
+    if (!this.inscricoes || this.inscricoes.length === 0) {
+      return [];
+    }
+    
+    const cupons = this.inscricoes
+      .map(inscricao => inscricao.couponCode)
+      .filter((cupom): cupom is string => cupom !== undefined && cupom !== null && cupom.trim() !== '')
+      .filter((cupom, index, array) => array.indexOf(cupom) === index);
+    
+    return cupons.sort();
+  }
+
+  formatarCupom(cupom: string | undefined | null): string {
+    if (!cupom || cupom.trim() === '') {
+      return '-';
+    }
+    return cupom;
+  }
+
+  getCupomBadgeClass(cupom: string | undefined | null): string {
+    if (!cupom || cupom.trim() === '') {
+      return 'cupom-badge no-cupom';
+    }
+    
+    // Diferentes classes para diferentes tipos de cupom
+    if (cupom.includes('LGCYBV')) {
+      return 'cupom-badge cupom-bv';
+    } else if (cupom.includes('LGCYITA')) {
+      return 'cupom-badge cupom-ita';
+    } else if (cupom.includes('LGCYSTAFF')) {
+      return 'cupom-badge cupom-staff';
+    }
+    
+    return 'cupom-badge cupom-other';
+  }
+
   limparFiltros(): void {
     this.searchTerm = '';
     this.statusFilter = '';
     this.loteFilter = '';
     this.paymentMethodFilter = '';
+    this.couponFilter = '';
     this.currentPage = 1; // Reset para primeira página
   }
 

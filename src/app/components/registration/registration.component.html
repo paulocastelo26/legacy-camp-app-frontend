@@ -178,14 +178,6 @@
               placeholder="Instagram e Facebook"
               [class.error]="submitted && f['socialMedia'].errors"
             />
-            <div
-              class="error-message"
-              *ngIf="submitted && f['socialMedia'].errors"
-            >
-              <span *ngIf="f['socialMedia'].errors['required']"
-                >Rede social é obrigatória</span
-              >
-            </div>
           </div>
         </div>
 
@@ -348,14 +340,6 @@
               rows="3"
               [class.error]="submitted && f['ministryParticipation'].errors"
             ></textarea>
-            <div
-              class="error-message"
-              *ngIf="submitted && f['ministryParticipation'].errors"
-            >
-              <span *ngIf="f['ministryParticipation'].errors['required']"
-                >Esta informação é obrigatória</span
-              >
-            </div>
           </div>
         </div>
       </section>
@@ -856,8 +840,7 @@
                 Estou ciente dos termos contratuais que deverá ser lido
                 integralmente, e após recebida a cópia por e-mail, deverá ser
                 assinada digitalmente (gov.br) e enviado para o contato
-                da organização.
-                Li e aceito os termos contratuais e me comprometo a assinar digitalmente o contrato quando recebido. *
+                da organização. *
               </label>
               <div class="terms-link-container">
                 <button type="button" class="terms-link" (click)="openTermsModal()">

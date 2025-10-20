@@ -60,7 +60,7 @@ export class RegistrationComponent {
 
       // Informações de Igreja
       isLagoinhaMember: ['', [Validators.required]],
-      churchName: ['', [Validators.required]],
+      churchName: [''],
       ministryParticipation: [''],
 
       // Informações da Inscrição
@@ -317,7 +317,7 @@ export class RegistrationComponent {
 
   // Método para verificar se pode submeter o formulário
   canSubmitForm(): boolean {
-    return this.termsAccepted && this.registrationForm.get('termsAwareness')?.value;
+    return this.registrationForm.get('termsAwareness')?.value === true;
   }
 
   // Método para verificar se deve mostrar informações de pagamento
