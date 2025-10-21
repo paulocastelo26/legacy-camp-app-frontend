@@ -16,6 +16,12 @@
       <!-- 👤 Informações Pessoais -->
       <section class="form-section">
         <h2>👤 Informações Pessoais</h2>
+        
+        <div class="info-box" style="margin-bottom: 20px; padding: 15px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; color: #856404;">
+          <p style="color: #856404; margin: 0; font-weight: 500;">
+            <strong>📢 Importante:</strong> O Legacy Camp 2025 é destinado exclusivamente para pessoas com 18 anos ou mais.
+          </p>
+        </div>
 
         <div class="form-row">
           <div class="form-group full-width">
@@ -74,7 +80,7 @@
               <span *ngIf="f['age'].errors['required']"
                 >Idade é obrigatória</span
               >
-              <span *ngIf="f['age'].errors['min']">Idade mínima é 12 anos</span>
+              <span *ngIf="f['age'].errors['min']">Idade mínima é 18 anos</span>
               <span *ngIf="f['age'].errors['max']"
                 >Idade máxima é 100 anos</span
               >

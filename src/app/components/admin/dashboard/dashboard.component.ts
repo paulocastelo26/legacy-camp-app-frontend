@@ -100,8 +100,9 @@ export class AdminDashboardComponent implements OnInit {
           !inscricao.couponCode || inscricao.couponCode.trim() === ''
         );
       } else {
+        const cupomNormalizado = this.couponFilter.trim();
         filtradas = filtradas.filter(inscricao =>
-          inscricao.couponCode && inscricao.couponCode === this.couponFilter
+          inscricao.couponCode && inscricao.couponCode.trim() === cupomNormalizado
         );
       }
     }
@@ -152,8 +153,9 @@ export class AdminDashboardComponent implements OnInit {
           !inscricao.couponCode || inscricao.couponCode.trim() === ''
         );
       } else {
+        const cupomNormalizado = this.couponFilter.trim();
         filtradas = filtradas.filter(inscricao =>
-          inscricao.couponCode && inscricao.couponCode === this.couponFilter
+          inscricao.couponCode && inscricao.couponCode.trim() === cupomNormalizado
         );
       }
     }
@@ -300,7 +302,12 @@ export class AdminDashboardComponent implements OnInit {
         !inscricao.couponCode || inscricao.couponCode.trim() === ''
       ).length;
     }
-    return this.inscricoes.filter(inscricao => inscricao.couponCode && inscricao.couponCode === cupom).length;
+    
+    // Normalizar cupom para comparação
+    const cupomNormalizado = cupom.trim();
+    return this.inscricoes.filter(inscricao => 
+      inscricao.couponCode && inscricao.couponCode.trim() === cupomNormalizado
+    ).length;
   }
 
   getCuponsUnicos(): string[] {
@@ -311,7 +318,12 @@ export class AdminDashboardComponent implements OnInit {
     const cupons = this.inscricoes
       .map(inscricao => inscricao.couponCode)
       .filter((cupom): cupom is string => cupom !== undefined && cupom !== null && cupom.trim() !== '')
-      .filter((cupom, index, array) => array.indexOf(cupom) === index);
+      .map(cupom => cupom.trim()) // Normalizar espaços em branco
+      .filter((cupom, index, array) => array.indexOf(cupom) === index); // Remover duplicatas
+    
+    // Log para debug - remover em produção
+    console.log('Cupons encontrados:', cupons);
+    console.log('Total de inscrições:', this.inscricoes.length);
     
     return cupons.sort();
   }

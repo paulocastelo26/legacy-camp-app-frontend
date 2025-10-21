@@ -46,7 +46,7 @@ export class RegistrationComponent {
       // Informações Pessoais
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       birthDate: ['', [Validators.required]],
-      age: ['', [Validators.required, Validators.min(12), Validators.max(100)]],
+      age: ['', [Validators.required, Validators.min(18), Validators.max(100)]],
       gender: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\) \d{5}-\d{4}$/)]],
       email: ['', [Validators.required, Validators.email]],
@@ -176,11 +176,26 @@ export class RegistrationComponent {
       }
       
       this.registrationForm.patchValue({ age: age });
+      
+      // Verificar se é menor de 18 anos e mostrar aviso
+      if (age < 18) {
+        this.showErrorModal('Desculpe, apenas pessoas com 18 anos ou mais podem se inscrever no Legacy Camp 2025.');
+        // Limpar a data de nascimento para forçar o usuário a inserir uma data válida
+        this.registrationForm.patchValue({ birthDate: '' });
+        this.registrationForm.patchValue({ age: '' });
+      }
     }
   }
 
   onSubmit() {
     this.submitted = true;
+
+    // Verificação adicional de idade mínima
+    const age = this.registrationForm.get('age')?.value;
+    if (age && age < 18) {
+      this.showErrorModal('Desculpe, apenas pessoas com 18 anos ou mais podem se inscrever no Legacy Camp 2025.');
+      return;
+    }
 
     if (this.registrationForm.valid) {
       this.isSubmitting = true;
