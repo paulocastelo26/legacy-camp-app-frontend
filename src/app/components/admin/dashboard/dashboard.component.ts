@@ -421,4 +421,38 @@ export class AdminDashboardComponent implements OnInit {
   formatarBoolean(valor: boolean | undefined): string {
     return valor ? 'Sim' : 'Não';
   }
+
+  exportarExcel(): void {
+    this.isLoading = true;
+    
+    this.inscricaoService.exportarExcel().subscribe({
+      next: (blob) => {
+        // Criar um link para download
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        
+        // Gerar nome do arquivo com data atual
+        const agora = new Date();
+        const dataFormatada = agora.toLocaleDateString('pt-BR').replace(/\//g, '-');
+        const nomeArquivo = `inscricoes-legacy-camp-${dataFormatada}.xlsx`;
+        
+        link.download = nomeArquivo;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Limpar o URL criado
+        window.URL.revokeObjectURL(url);
+        
+        this.isLoading = false;
+        console.log('Arquivo Excel exportado com sucesso!');
+      },
+      error: (error) => {
+        console.error('Erro ao exportar Excel:', error);
+        this.isLoading = false;
+        alert('Erro ao exportar arquivo Excel. Tente novamente.');
+      }
+    });
+  }
 }

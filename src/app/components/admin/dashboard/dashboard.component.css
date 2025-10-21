@@ -200,6 +200,30 @@
   cursor: not-allowed;
 }
 
+.export-excel-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.export-excel-button:hover:not(:disabled) {
+  background: #218838;
+}
+
+.export-excel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .table-container {
   background: white;
   border-radius: 10px;
@@ -535,7 +559,8 @@
   }
 
   .clear-filters-button,
-  .refresh-button {
+  .refresh-button,
+  .export-excel-button {
     width: 100%;
     justify-content: center;
   }

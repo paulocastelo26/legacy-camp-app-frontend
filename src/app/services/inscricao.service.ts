@@ -79,4 +79,10 @@ export class InscricaoService {
   obterEstatisticas(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/stats`);
   }
+
+  exportarExcel(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/export/excel`, {
+      responseType: 'blob'
+    });
+  }
 } 

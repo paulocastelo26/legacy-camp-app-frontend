@@ -131,6 +131,9 @@
         <button class="refresh-button" (click)="carregarInscricoes()" [disabled]="isLoading">
           {{ isLoading ? 'Carregando...' : 'Atualizar' }}
         </button>
+        <button class="export-excel-button" (click)="exportarExcel()" [disabled]="isLoading">
+          📊 Exportar Excel
+        </button>
       </div>
     </div>
 
