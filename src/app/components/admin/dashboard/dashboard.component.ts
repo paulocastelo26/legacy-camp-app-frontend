@@ -30,6 +30,10 @@ export class AdminDashboardComponent implements OnInit {
   itemsPerPage: number = 10;
   totalPages: number = 0;
 
+  // Propriedades para seleção múltipla
+  selectedInscricoes: Set<number> = new Set();
+  isSelectAllChecked: boolean = false;
+
   // Propriedade para acessar Math no template
   Math = Math;
 
@@ -202,6 +206,34 @@ export class AdminDashboardComponent implements OnInit {
       error: (error) => {
         console.error('Erro ao enviar contrato:', error);
         alert('Erro ao enviar contrato. Tente novamente.');
+      }
+    });
+  }
+
+  enviarBemVindo(inscricao: Inscricao): void {
+    if (!inscricao.id) {
+      alert('Inscrição sem ID.');
+      return;
+    }
+    this.emailService.sendWelcome(inscricao.id).subscribe({
+      next: () => alert('Email de bem-vindo enviado com sucesso.'),
+      error: (error) => {
+        console.error('Erro ao enviar email de bem-vindo:', error);
+        alert('Erro ao enviar email de bem-vindo. Tente novamente.');
+      }
+    });
+  }
+
+  enviarInstrucoesPagamento(inscricao: Inscricao): void {
+    if (!inscricao.id) {
+      alert('Inscrição sem ID.');
+      return;
+    }
+    this.emailService.sendPaymentInstructions(inscricao.id).subscribe({
+      next: () => alert('Instruções de pagamento enviadas com sucesso.'),
+      error: (error) => {
+        console.error('Erro ao enviar instruções de pagamento:', error);
+        alert('Erro ao enviar instruções de pagamento. Tente novamente.');
       }
     });
   }
@@ -422,6 +454,21 @@ export class AdminDashboardComponent implements OnInit {
     return valor ? 'Sim' : 'Não';
   }
 
+  formatarMetodoPagamento(metodo: string | undefined): string {
+    if (!metodo) return '-';
+    
+    switch (metodo.toLowerCase()) {
+      case 'carne':
+        return 'Carnê';
+      case 'cartao':
+        return 'Cartão';
+      case 'pix':
+        return 'PIX';
+      default:
+        return metodo;
+    }
+  }
+
   exportarExcel(): void {
     this.isLoading = true;
     
@@ -454,5 +501,110 @@ export class AdminDashboardComponent implements OnInit {
         alert('Erro ao exportar arquivo Excel. Tente novamente.');
       }
     });
+  }
+
+  // Métodos para seleção múltipla
+
+  toggleSelectAll(): void {
+    this.isSelectAllChecked = !this.isSelectAllChecked;
+    
+    if (this.isSelectAllChecked) {
+      // Selecionar todas as inscrições da página atual
+      this.inscricoesFiltradas.forEach(inscricao => {
+        if (inscricao.id) {
+          this.selectedInscricoes.add(inscricao.id);
+        }
+      });
+    } else {
+      // Desmarcar todas
+      this.selectedInscricoes.clear();
+    }
+  }
+
+  toggleSelectInscricao(inscricaoId: number): void {
+    if (this.selectedInscricoes.has(inscricaoId)) {
+      this.selectedInscricoes.delete(inscricaoId);
+    } else {
+      this.selectedInscricoes.add(inscricaoId);
+    }
+    
+    // Verificar se todas estão selecionadas
+    this.isSelectAllChecked = this.inscricoesFiltradas.every(inscricao => 
+      inscricao.id && this.selectedInscricoes.has(inscricao.id)
+    );
+  }
+
+  isInscricaoSelected(inscricaoId: number): boolean {
+    return this.selectedInscricoes.has(inscricaoId);
+  }
+
+  get selectedCount(): number {
+    return this.selectedInscricoes.size;
+  }
+
+  // Métodos para envio em lote
+  enviarContratoLote(): void {
+    if (this.selectedInscricoes.size === 0) {
+      alert('Selecione pelo menos uma inscrição.');
+      return;
+    }
+
+    const confirmMessage = `Enviar contrato para ${this.selectedInscricoes.size} inscrição(ões)?`;
+    if (!confirm(confirmMessage)) return;
+
+    this.enviarEmailsEmLote('contrato');
+  }
+
+  enviarBemVindoLote(): void {
+    if (this.selectedInscricoes.size === 0) {
+      alert('Selecione pelo menos uma inscrição.');
+      return;
+    }
+
+    const confirmMessage = `Enviar email de bem-vindo para ${this.selectedInscricoes.size} inscrição(ões)?`;
+    if (!confirm(confirmMessage)) return;
+
+    this.enviarEmailsEmLote('bem-vindo');
+  }
+
+  enviarInstrucoesPagamentoLote(): void {
+    if (this.selectedInscricoes.size === 0) {
+      alert('Selecione pelo menos uma inscrição.');
+      return;
+    }
+
+    const confirmMessage = `Enviar instruções de pagamento para ${this.selectedInscricoes.size} inscrição(ões)?`;
+    if (!confirm(confirmMessage)) return;
+
+    this.enviarEmailsEmLote('instrucoes');
+  }
+
+  private enviarEmailsEmLote(tipo: string): void {
+    const promises = Array.from(this.selectedInscricoes).map(id => {
+      switch (tipo) {
+        case 'contrato':
+          return this.emailService.sendContract(id).toPromise();
+        case 'bem-vindo':
+          return this.emailService.sendWelcome(id).toPromise();
+        case 'instrucoes':
+          return this.emailService.sendPaymentInstructions(id).toPromise();
+        default:
+          return Promise.resolve();
+      }
+    });
+
+    Promise.all(promises)
+      .then(() => {
+        const tipoTexto = tipo === 'contrato' ? 'contratos' : 
+                         tipo === 'bem-vindo' ? 'emails de bem-vindo' : 
+                         'instruções de pagamento';
+        alert(`${this.selectedInscricoes.size} ${tipoTexto} enviados com sucesso!`);
+        this.selectedInscricoes.clear();
+        this.isSelectAllChecked = false;
+      })
+      .catch(error => {
+        console.error('Erro ao enviar emails em lote:', error);
+        alert('Erro ao enviar alguns emails. Verifique o console para detalhes.');
+      });
   }
 }

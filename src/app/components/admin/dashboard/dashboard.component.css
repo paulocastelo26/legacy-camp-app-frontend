@@ -365,6 +365,156 @@
   background: #e3f2fd;
 }
 
+/* Estilos do Dropdown de Emails */
+.email-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.email-dropdown-toggle {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.email-dropdown-toggle:hover {
+  background: #e3f2fd;
+}
+
+.email-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.email-dropdown:hover .email-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.email-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.email-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.email-dropdown-item:hover {
+  background: #f8f9fa;
+  color: #667eea;
+}
+
+.email-dropdown-item:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.email-dropdown-item:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.email-dropdown-item:only-child {
+  border-radius: 8px;
+}
+
+/* Estilos para checkboxes */
+.checkbox-column {
+  width: 50px;
+  text-align: center;
+  padding: 8px !important;
+}
+
+.checkbox-column input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+/* Estilos para ações em lote */
+.bulk-actions {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.bulk-info {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.bulk-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.bulk-email-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bulk-email-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.bulk-email-btn.contract-btn:hover {
+  background: rgba(255, 193, 7, 0.3);
+  border-color: rgba(255, 193, 7, 0.5);
+}
+
+.bulk-email-btn.welcome-btn:hover {
+  background: rgba(40, 167, 69, 0.3);
+  border-color: rgba(40, 167, 69, 0.5);
+}
+
+.bulk-email-btn.payment-btn:hover {
+  background: rgba(220, 53, 69, 0.3);
+  border-color: rgba(220, 53, 69, 0.5);
+}
+
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
@@ -493,6 +643,22 @@
     flex-wrap: wrap;
   }
 
+  .bulk-actions {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .bulk-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .bulk-email-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
   .dashboard-stats {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -508,6 +674,16 @@
   .inscricoes-table th,
   .inscricoes-table td {
     padding: 8px 6px;
+  }
+
+  .email-dropdown-menu {
+    min-width: 180px;
+    right: -10px;
+  }
+
+  .email-dropdown-item {
+    padding: 10px 12px;
+    font-size: 13px;
   }
 
   .modal-overlay {

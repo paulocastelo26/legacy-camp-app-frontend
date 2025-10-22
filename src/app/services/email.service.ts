@@ -7,17 +7,19 @@ import { Observable } from 'rxjs';
 })
 export class EmailService {
   private readonly baseUrl = 'https://legacy-camp-app-backend-production.up.railway.app';
-  private readonly paymentInstructionsUrl = `${this.baseUrl}/email/payment-instructions`;
-  private readonly contractUrl = `${this.baseUrl}/email/contract`;
 
   constructor(private http: HttpClient) {}
 
-  sendPaymentInstructions(inscricaoId: number): Observable<any> {
-    return this.http.post<any>(this.paymentInstructionsUrl, { inscricaoId: inscricaoId.toString() });
+  sendContract(inscricaoId: number): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/email/send-contract/${inscricaoId}`, {});
   }
 
-  sendContract(inscricaoId: number): Observable<any> {
-    return this.http.post<any>(this.contractUrl, { inscricaoId: inscricaoId.toString() });
+  sendWelcome(inscricaoId: number): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/email/send-welcome/${inscricaoId}`, {});
+  }
+
+  sendPaymentInstructions(inscricaoId: number): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/email/send-payment-instructions/${inscricaoId}`, {});
   }
 }
 

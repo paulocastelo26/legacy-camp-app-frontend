@@ -17,7 +17,7 @@
       </div>
       <div class="stat-card">
         <h3>Pendentes</h3>
-        <p class="stat-number">{{ getInscricoesPorStatus('PENDENTE') }}</p>
+        <p class="stat-number">{{ getInscricoesPorStatus("PENDENTE") }}</p>
       </div>
       <!-- <div class="stat-card">
         <h3>Parcial 01</h3>
@@ -37,22 +37,22 @@
       </div> -->
       <div class="stat-card">
         <h3>Aprovadas</h3>
-        <p class="stat-number">{{ getInscricoesPorStatus('APROVADO') }}</p>
+        <p class="stat-number">{{ getInscricoesPorStatus("APROVADO") }}</p>
       </div>
       <div class="stat-card">
         <h3>Rejeitadas</h3>
-        <p class="stat-number">{{ getInscricoesPorStatus('REJEITADO') }}</p>
+        <p class="stat-number">{{ getInscricoesPorStatus("REJEITADO") }}</p>
       </div>
     </div>
 
     <div class="dashboard-stats secondary-stats">
       <div class="stat-card">
         <h3>1º Lote</h3>
-        <p class="stat-number">{{ getInscricoesPorLote('lote1') }}</p>
+        <p class="stat-number">{{ getInscricoesPorLote("lote1") }}</p>
       </div>
       <div class="stat-card">
         <h3>2º Lote</h3>
-        <p class="stat-number">{{ getInscricoesPorLote('lote2') }}</p>
+        <p class="stat-number">{{ getInscricoesPorLote("lote2") }}</p>
       </div>
       <!-- <div class="stat-card">
         <h3>Sem Cupom</h3>
@@ -78,7 +78,7 @@
           [(ngModel)]="searchTerm"
           placeholder="Buscar por nome, email ou telefone..."
           class="search-input"
-        >
+        />
       </div>
       <div class="filter-group">
         <select [(ngModel)]="statusFilter" class="filter-select">
@@ -117,7 +117,11 @@
         </select>
       </div>
       <div class="filter-group">
-        <select [(ngModel)]="itemsPerPage" (change)="alterarItensPorPagina(+$any($event.target).value)" class="filter-select">
+        <select
+          [(ngModel)]="itemsPerPage"
+          (change)="alterarItensPorPagina(+$any($event.target).value)"
+          class="filter-select"
+        >
           <option value="5">5 por página</option>
           <option value="10">10 por página</option>
           <option value="20">20 por página</option>
@@ -128,10 +132,18 @@
         <button class="clear-filters-button" (click)="limparFiltros()">
           🗑️ Limpar Filtros
         </button>
-        <button class="refresh-button" (click)="carregarInscricoes()" [disabled]="isLoading">
-          {{ isLoading ? 'Carregando...' : 'Atualizar' }}
+        <button
+          class="refresh-button"
+          (click)="carregarInscricoes()"
+          [disabled]="isLoading"
+        >
+          {{ isLoading ? "Carregando..." : "Atualizar" }}
         </button>
-        <button class="export-excel-button" (click)="exportarExcel()" [disabled]="isLoading">
+        <button
+          class="export-excel-button"
+          (click)="exportarExcel()"
+          [disabled]="isLoading"
+        >
           📊 Exportar Excel
         </button>
       </div>
@@ -150,6 +162,14 @@
         <table class="inscricoes-table">
           <thead>
             <tr>
+              <th class="checkbox-column">
+                <input
+                  type="checkbox"
+                  [checked]="isSelectAllChecked"
+                  (change)="toggleSelectAll()"
+                  title="Selecionar todas"
+                />
+              </th>
               <th>Nome</th>
               <th>Pag.</th>
               <th>Email</th>
@@ -162,25 +182,43 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let inscricao of inscricoesFiltradas" class="table-row" style="color: #000;">
+            <tr
+              *ngFor="let inscricao of inscricoesFiltradas"
+              class="table-row"
+              style="color: #000"
+            >
+              <td class="checkbox-column">
+                <input
+                  type="checkbox"
+                  [checked]="isInscricaoSelected(inscricao.id!)"
+                  (change)="toggleSelectInscricao(inscricao.id!)"
+                  title="Selecionar inscrição"
+                />
+              </td>
               <td>
                 <div class="inscricao-info">
                   <strong>{{ inscricao.fullName }}</strong>
                   <small>{{ inscricao.gender }}</small>
                 </div>
               </td>
-              <td>{{ inscricao.paymentMethod }}</td>
+              <td>{{ formatarMetodoPagamento(inscricao.paymentMethod) }}</td>
               <td>{{ inscricao.email }}</td>
               <td>{{ inscricao.phone }}</td>
               <td>{{ inscricao.registrationLot }}</td>
               <td>
-                <span class="cupom-badge" [ngClass]="getCupomBadgeClass(inscricao.couponCode)">
+                <span
+                  class="cupom-badge"
+                  [ngClass]="getCupomBadgeClass(inscricao.couponCode)"
+                >
                   {{ formatarCupom(inscricao.couponCode) }}
                 </span>
               </td>
               <td>
-                <span class="status-badge" [ngClass]="getStatusClass(inscricao.status)">
-                  {{ inscricao.status || 'PENDENTE' }}
+                <span
+                  class="status-badge"
+                  [ngClass]="getStatusClass(inscricao.status)"
+                >
+                  {{ inscricao.status || "PENDENTE" }}
                 </span>
               </td>
               <!-- <td>
@@ -194,29 +232,69 @@
               </td> -->
               <td>
                 <div class="actions">
-                  <button 
-                    class="details-button" 
+                  <button
+                    class="details-button"
                     (click)="abrirDetalhes(inscricao)"
                     title="Ver detalhes"
                   >
                     👁️
                   </button>
-                  <select 
-                    (change)="atualizarStatus(inscricao, $any($event.target).value)"
+                  <select
+                    (change)="
+                      atualizarStatus(inscricao, $any($event.target).value)
+                    "
                     class="status-select-small"
                     [value]="inscricao.status || 'PENDENTE'"
-                    [title]="getStatusDescription(inscricao.status || 'PENDENTE')"
+                    [title]="
+                      getStatusDescription(inscricao.status || 'PENDENTE')
+                    "
                   >
-                    <option 
-                      *ngFor="let status of getStatusDisponiveis(inscricao.paymentMethod)" 
+                    <option
+                      *ngFor="
+                        let status of getStatusDisponiveis(
+                          inscricao.paymentMethod
+                        )
+                      "
                       [value]="status"
                       [selected]="status === (inscricao.status || 'PENDENTE')"
                     >
                       {{ status }}
                     </option>
                   </select>
-                  <button 
-                    class="delete-button" 
+
+                  <!-- Dropdown de Emails -->
+                  <div class="email-dropdown">
+                    <button class="email-dropdown-toggle" title="Enviar emails">
+                      📧
+                    </button>
+                    <div class="email-dropdown-menu">
+                      <button
+                        class="email-dropdown-item"
+                        (click)="enviarBemVindo(inscricao)"
+                        title="Enviar email de bem-vindo"
+                      >
+                        👋 Envio de Bem-vindo
+                      </button>
+                      <button
+                        class="email-dropdown-item"
+                        (click)="enviarContrato(inscricao)"
+                        title="Enviar contrato por email"
+                      >
+                        📄 Envio de Contrato
+                      </button>
+
+                      <button
+                        class="email-dropdown-item"
+                        (click)="enviarInstrucoesPagamento(inscricao)"
+                        title="Enviar instruções de pagamento"
+                      >
+                        💳 Envio de Instrução de Pagamento
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    class="delete-button"
                     (click)="removerInscricao(inscricao)"
                     title="Remover inscrição"
                   >
@@ -232,20 +310,52 @@
           <p>Nenhuma inscrição encontrada.</p>
         </div>
 
+        <!-- Botões de envio em lote -->
+        <div *ngIf="selectedCount > 0" class="bulk-actions">
+          <div class="bulk-info">
+            <span>{{ selectedCount }} inscrição(ões) selecionada(s)</span>
+          </div>
+          <div class="bulk-buttons">
+            <button
+              class="bulk-email-btn contract-btn"
+              (click)="enviarContratoLote()"
+              title="Enviar contrato para selecionados"
+            >
+              📄 Enviar Contrato
+            </button>
+            <button
+              class="bulk-email-btn welcome-btn"
+              (click)="enviarBemVindoLote()"
+              title="Enviar bem-vindo para selecionados"
+            >
+              👋 Enviar Bem-vindo
+            </button>
+            <button
+              class="bulk-email-btn payment-btn"
+              (click)="enviarInstrucoesPagamentoLote()"
+              title="Enviar instruções de pagamento para selecionados"
+            >
+              💳 Enviar Instruções
+            </button>
+          </div>
+        </div>
+
         <!-- Informações de paginação -->
         <div *ngIf="totalInscricoesFiltradas > 0" class="pagination-info">
           <p>
-            Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} a 
-            {{ Math.min(currentPage * itemsPerPage, totalInscricoesFiltradas) }} de 
-            {{ totalInscricoesFiltradas }} inscrições
+            Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} a
+            {{
+              Math.min(currentPage * itemsPerPage, totalInscricoesFiltradas)
+            }}
+            de {{ totalInscricoesFiltradas }} inscrições
           </p>
         </div>
 
         <!-- Controles de paginação -->
         <div *ngIf="totalPages > 1" class="pagination-controls">
-          <button 
-            class="pagination-button" 
-            (click)="paginaAnterior()" 
+          <button
+            class="pagination-button"
+            (click)="paginaAnterior()"
             [disabled]="currentPage === 1"
             title="Página anterior"
           >
@@ -253,9 +363,9 @@
           </button>
 
           <div class="pagination-numbers">
-            <button 
-              *ngFor="let pagina of paginasVisiveis" 
-              class="pagination-number" 
+            <button
+              *ngFor="let pagina of paginasVisiveis"
+              class="pagination-number"
               [class.active]="pagina === currentPage"
               (click)="irParaPagina(pagina)"
             >
@@ -263,9 +373,9 @@
             </button>
           </div>
 
-          <button 
-            class="pagination-button" 
-            (click)="proximaPagina()" 
+          <button
+            class="pagination-button"
+            (click)="proximaPagina()"
             [disabled]="currentPage === totalPages"
             title="Próxima página"
           >
@@ -278,13 +388,17 @@
 </div>
 
 <!-- Modal de Detalhes -->
-<div *ngIf="showDetailsModal && selectedInscricao" class="modal-overlay" (click)="fecharDetalhes()">
+<div
+  *ngIf="showDetailsModal && selectedInscricao"
+  class="modal-overlay"
+  (click)="fecharDetalhes()"
+>
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h2>Detalhes da Inscrição</h2>
       <button class="close-button" (click)="fecharDetalhes()">×</button>
     </div>
-    
+
     <div class="modal-body">
       <div class="details-grid">
         <!-- Informações Pessoais -->
@@ -294,7 +408,8 @@
             <strong>Nome Completo:</strong> {{ selectedInscricao.fullName }}
           </div>
           <div class="detail-item">
-            <strong>Data de Nascimento:</strong> {{ formatarData(selectedInscricao.birthDate) }}
+            <strong>Data de Nascimento:</strong>
+            {{ formatarData(selectedInscricao.birthDate) }}
           </div>
           <div class="detail-item">
             <strong>Idade:</strong> {{ selectedInscricao.age }} anos
@@ -323,10 +438,12 @@
             <strong>Nome:</strong> {{ selectedInscricao.emergencyContactName }}
           </div>
           <div class="detail-item">
-            <strong>Telefone:</strong> {{ selectedInscricao.emergencyContactPhone }}
+            <strong>Telefone:</strong>
+            {{ selectedInscricao.emergencyContactPhone }}
           </div>
           <div class="detail-item">
-            <strong>Relacionamento:</strong> {{ selectedInscricao.emergencyContactRelationship }}
+            <strong>Relacionamento:</strong>
+            {{ selectedInscricao.emergencyContactRelationship }}
           </div>
         </div>
 
@@ -334,19 +451,26 @@
         <div class="detail-section">
           <h3>Informações Religiosas</h3>
           <div class="detail-item">
-            <strong>Membro da Lagoinha:</strong> {{ selectedInscricao.isLagoinhaMember }}
+            <strong>Membro da Lagoinha:</strong>
+            {{ selectedInscricao.isLagoinhaMember }}
           </div>
           <div class="detail-item">
             <strong>Igreja:</strong> {{ selectedInscricao.churchName }}
           </div>
           <div class="detail-item">
-            <strong>Participação em Ministério:</strong> {{ selectedInscricao.ministryParticipation }}
+            <strong>Participação em Ministério:</strong>
+            {{ selectedInscricao.ministryParticipation }}
           </div>
           <div class="detail-item">
-            <strong>Teste de Ministério:</strong> {{ selectedInscricao.hasMinistryTest }}
+            <strong>Teste de Ministério:</strong>
+            {{ selectedInscricao.hasMinistryTest }}
           </div>
-          <div class="detail-item" *ngIf="selectedInscricao.ministryTestResults">
-            <strong>Resultados do Teste:</strong> {{ selectedInscricao.ministryTestResults }}
+          <div
+            class="detail-item"
+            *ngIf="selectedInscricao.ministryTestResults"
+          >
+            <strong>Resultados do Teste:</strong>
+            {{ selectedInscricao.ministryTestResults }}
           </div>
         </div>
 
@@ -356,17 +480,22 @@
           <div class="detail-item">
             <strong>Lote:</strong> {{ selectedInscricao.registrationLot }}
           </div>
+            <div class="detail-item">
+              <strong>Método de Pagamento:</strong>
+              {{ formatarMetodoPagamento(selectedInscricao.paymentMethod) }}
+            </div>
           <div class="detail-item">
-            <strong>Método de Pagamento:</strong> {{ selectedInscricao.paymentMethod }}
-          </div>
-          <div class="detail-item">
-            <strong>Cupom Utilizado:</strong> 
-            <span class="cupom-badge" [ngClass]="getCupomBadgeClass(selectedInscricao.couponCode)">
+            <strong>Cupom Utilizado:</strong>
+            <span
+              class="cupom-badge"
+              [ngClass]="getCupomBadgeClass(selectedInscricao.couponCode)"
+            >
               {{ formatarCupom(selectedInscricao.couponCode) }}
             </span>
           </div>
           <div class="detail-item">
-            <strong>Tamanho da Camiseta:</strong> {{ selectedInscricao.shirtSize }}
+            <strong>Tamanho da Camiseta:</strong>
+            {{ selectedInscricao.shirtSize }}
           </div>
         </div>
 
@@ -377,16 +506,20 @@
             <strong>Alergia:</strong> {{ selectedInscricao.hasAllergy }}
           </div>
           <div class="detail-item" *ngIf="selectedInscricao.allergyDetails">
-            <strong>Detalhes da Alergia:</strong> {{ selectedInscricao.allergyDetails }}
+            <strong>Detalhes da Alergia:</strong>
+            {{ selectedInscricao.allergyDetails }}
           </div>
           <div class="detail-item" *ngIf="selectedInscricao.usesMedication">
-            <strong>Usa Medicação:</strong> {{ selectedInscricao.usesMedication }}
+            <strong>Usa Medicação:</strong>
+            {{ selectedInscricao.usesMedication }}
           </div>
           <div class="detail-item" *ngIf="selectedInscricao.medicationDetails">
-            <strong>Detalhes da Medicação:</strong> {{ selectedInscricao.medicationDetails }}
+            <strong>Detalhes da Medicação:</strong>
+            {{ selectedInscricao.medicationDetails }}
           </div>
           <div class="detail-item">
-            <strong>Restrição Alimentar:</strong> {{ selectedInscricao.dietaryRestriction }}
+            <strong>Restrição Alimentar:</strong>
+            {{ selectedInscricao.dietaryRestriction }}
           </div>
         </div>
 
@@ -402,16 +535,20 @@
         <div class="detail-section">
           <h3>Autorizações</h3>
           <div class="detail-item">
-            <strong>Autorização de Imagem:</strong> {{ formatarBoolean(selectedInscricao.imageAuthorization) }}
+            <strong>Autorização de Imagem:</strong>
+            {{ formatarBoolean(selectedInscricao.imageAuthorization) }}
           </div>
           <div class="detail-item">
-            <strong>Ciência da Análise:</strong> {{ formatarBoolean(selectedInscricao.analysisAwareness) }}
+            <strong>Ciência da Análise:</strong>
+            {{ formatarBoolean(selectedInscricao.analysisAwareness) }}
           </div>
           <div class="detail-item">
-            <strong>Ciência dos Termos:</strong> {{ formatarBoolean(selectedInscricao.termsAwareness) }}
+            <strong>Ciência dos Termos:</strong>
+            {{ formatarBoolean(selectedInscricao.termsAwareness) }}
           </div>
           <div class="detail-item">
-            <strong>Declaração de Verdade:</strong> {{ formatarBoolean(selectedInscricao.truthDeclaration) }}
+            <strong>Declaração de Verdade:</strong>
+            {{ formatarBoolean(selectedInscricao.truthDeclaration) }}
           </div>
         </div>
 
@@ -419,16 +556,21 @@
         <div class="detail-section">
           <h3>Informações do Sistema</h3>
           <div class="detail-item">
-            <strong>Status:</strong> 
-            <span class="status-badge" [ngClass]="getStatusClass(selectedInscricao.status)">
-              {{ selectedInscricao.status || 'pendente' }}
+            <strong>Status:</strong>
+            <span
+              class="status-badge"
+              [ngClass]="getStatusClass(selectedInscricao.status)"
+            >
+              {{ selectedInscricao.status || "pendente" }}
             </span>
           </div>
           <div class="detail-item">
-            <strong>Data de Criação:</strong> {{ formatarDataCompleta(selectedInscricao.createdAt) }}
+            <strong>Data de Criação:</strong>
+            {{ formatarDataCompleta(selectedInscricao.createdAt) }}
           </div>
           <div class="detail-item" *ngIf="selectedInscricao.updatedAt">
-            <strong>Última Atualização:</strong> {{ formatarDataCompleta(selectedInscricao.updatedAt) }}
+            <strong>Última Atualização:</strong>
+            {{ formatarDataCompleta(selectedInscricao.updatedAt) }}
           </div>
         </div>
       </div>
