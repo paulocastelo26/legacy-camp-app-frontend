@@ -16,10 +16,21 @@
       <!-- 👤 Informações Pessoais -->
       <section class="form-section">
         <h2>👤 Informações Pessoais</h2>
-        
-        <div class="info-box" style="margin-bottom: 20px; padding: 15px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; color: #856404;">
-          <p style="color: #856404; margin: 0; font-weight: 500;">
-            <strong>📢 Importante:</strong> O Legacy Camp 2025 é destinado exclusivamente para pessoas com 18 anos ou mais.
+
+        <div
+          class="info-box"
+          style="
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            color: #856404;
+          "
+        >
+          <p style="color: #856404; margin: 0; font-weight: 500">
+            <strong>📢 Importante:</strong> O Legacy Camp 2025 é destinado
+            exclusivamente para pessoas com 18 anos ou mais.
           </p>
         </div>
 
@@ -578,6 +589,11 @@
             <label>Tamanho da sua camisa *</label>
             <div class="radio-group">
               <label class="radio-option">
+                <input type="radio" formControlName="shirtSize" value="PP" />
+                <span class="radio-custom"></span>
+                PP
+              </label>
+              <label class="radio-option">
                 <input type="radio" formControlName="shirtSize" value="P" />
                 <span class="radio-custom"></span>
                 P
@@ -845,11 +861,15 @@
                 <span class="checkbox-custom"></span>
                 Estou ciente dos termos contratuais que deverá ser lido
                 integralmente, e após recebida a cópia por e-mail, deverá ser
-                assinada digitalmente (gov.br) e enviado para o contato
-                da organização. *
+                assinada digitalmente (gov.br) e enviado para o contato da
+                organização. *
               </label>
               <div class="terms-link-container">
-                <button type="button" class="terms-link" (click)="openTermsModal()">
+                <button
+                  type="button"
+                  class="terms-link"
+                  (click)="openTermsModal()"
+                >
                   📄 Ler Termos Contratuais do Legacy Camp 2025
                 </button>
               </div>
@@ -903,9 +923,9 @@
       </section>
 
       <div class="form-actions">
-        <button 
-          type="submit" 
-          class="submit-button" 
+        <button
+          type="submit"
+          class="submit-button"
           [disabled]="isSubmitting || !canSubmitForm()"
         >
           <span *ngIf="!isSubmitting">Enviar Inscrição</span>
@@ -955,67 +975,162 @@
       <div class="terms-content">
         <div class="terms-section">
           <h4>1. Identificação do Participante</h4>
-          <p>O(a) inscrito(a) declara que as informações prestadas no formulário de inscrição são verdadeiras e se compromete a atualizá-las caso haja mudanças.</p>
+          <p>
+            O(a) inscrito(a) declara que as informações prestadas no formulário
+            de inscrição são verdadeiras e se compromete a atualizá-las caso
+            haja mudanças.
+          </p>
         </div>
 
         <div class="terms-section">
           <h4>2. Sobre o Evento</h4>
-          <p>O Legacy Camp 2025 está previsto para ocorrer nos dias 14 a 16 de novembro de 2025, na Chácara Paraíso Verde, na Rodovia Manoel Urbano no KM 13, estrada do Calderão, Ramal do Incra.</p>
-          <p>O evento é promovido pelo Ministério Legacy da Lagoinha Manaus e tem caráter regional, para jovens acima de dezoito anos, sendo voltado exclusivamente para membros das igrejas Lagoinha da região Norte e Interessados de outras igrejas que, assim como os membros regionais, terão sua inscrição submetida para aprovação.</p>
+          <p>
+            O Legacy Camp 2025 está previsto para ocorrer nos dias 14 a 16 de
+            novembro de 2025, na Chácara Paraíso Verde, na Rodovia Manoel Urbano
+            no KM 13, estrada do Calderão, Ramal do Incra.
+          </p>
+          <p>
+            O evento é promovido pelo Ministério Legacy da Lagoinha Manaus e tem
+            caráter regional, para jovens acima de dezoito anos, sendo voltado
+            exclusivamente para membros das igrejas Lagoinha da região Norte e
+            Interessados de outras igrejas que, assim como os membros regionais,
+            terão sua inscrição submetida para aprovação.
+          </p>
         </div>
 
         <div class="terms-section">
           <h4>3. Inscrições</h4>
-          <p>O valor da inscrição varia conforme o lote selecionado, que é oferecido conforme quantidade disponível: 1º lote: R$ 250,00 e 2º lote: R$ 300,00, podendo surgir lote adicional conforme decisão da organização, e amplamente divulgado. A inscrição e pagamento deve ser feito pelo meio indicado no formulário www.legacycamp.com.br ou por meio diverso indicado.</p>
-          <p>Para inscrever dependente legal menor de idade, o adulto deverá entrar em contato com o número (92) 984095783 e requerer o formulário próprio e comprovar o vínculo familiar, ficando desde já ciente que será cobrada taxa para custeio de transporte, alimentação e recreação do participante menor. Durante as programações coletivas, o menor ficará em ambiente reservado com atividades voltadas para sua faixa etária.</p>
-          <p>Menor de zero a seis anos: isento; menor de sete a doze anos: R$ 150,00; menor acima de doze anos: valor integral do adulto referente ao lote praticado no ato da inscrição.</p>
-          <p>A inscrição de adultos inclui: transporte, alimentação, hospedagem e kit com camisa e caderneta.</p>
+          <p>
+            O valor da inscrição varia conforme o lote selecionado, que é
+            oferecido conforme quantidade disponível: 1º lote: R$ 250,00 e 2º
+            lote: R$ 300,00, podendo surgir lote adicional conforme decisão da
+            organização, e amplamente divulgado. A inscrição e pagamento deve
+            ser feito pelo meio indicado no formulário www.legacycamp.com.br ou
+            por meio diverso indicado.
+          </p>
+          <p>
+            Para inscrever dependente legal menor de idade, o adulto deverá
+            entrar em contato com o número (92) 984095783 e requerer o
+            formulário próprio e comprovar o vínculo familiar, ficando desde já
+            ciente que será cobrada taxa para custeio de transporte, alimentação
+            e recreação do participante menor. Durante as programações
+            coletivas, o menor ficará em ambiente reservado com atividades
+            voltadas para sua faixa etária.
+          </p>
+          <p>
+            Menor de zero a seis anos: isento; menor de sete a doze anos: R$
+            150,00; menor acima de doze anos: valor integral do adulto referente
+            ao lote praticado no ato da inscrição.
+          </p>
+          <p>
+            A inscrição de adultos inclui: transporte, alimentação, hospedagem e
+            kit com camisa e caderneta.
+          </p>
         </div>
 
         <div class="terms-section">
           <h4>4. Política de Cancelamento, Desistência e Transferência</h4>
-          <p>É garantida a solicitação de reembolso por desistência no prazo legal de 7 (sete) dias como previsto no art. 49 do Código de Defesa do Consumidor. Para desistências ocorridas após o prazo assinalado, a organização poderá ofertar a opção de Transferência de Vaga até 5 dias antes da realização do evento.</p>
-          <p>O participante poderá transferir sua vaga para outro interessado, desde que preenchidos cumulativamente os seguintes critérios:</p>
+          <p>
+            É garantida a solicitação de reembolso por desistência no prazo
+            legal de 7 (sete) dias como previsto no art. 49 do Código de Defesa
+            do Consumidor. Para desistências ocorridas após o prazo assinalado,
+            a organização poderá ofertar a opção de Transferência de Vaga até 5
+            dias antes da realização do evento.
+          </p>
+          <p>
+            O participante poderá transferir sua vaga para outro interessado,
+            desde que preenchidos cumulativamente os seguintes critérios:
+          </p>
           <ul>
             <li>A equipe organizadora seja previamente comunicada;</li>
             <li>A nova pessoa também atenda aos critérios de participação;</li>
             <li>A equipe avalie e aprove a substituição.</li>
           </ul>
-          <p>A transferência só será efetivada após confirmação da organização.</p>
+          <p>
+            A transferência só será efetivada após confirmação da organização.
+          </p>
         </div>
 
         <div class="terms-section">
           <h4>5. Normas de Conduta</h4>
           <p>O participante se compromete a:</p>
           <ul>
-            <li>Seguir todas as orientações da equipe organizadora e de segurança;</li>
-            <li>Manter comportamento respeitoso e compatível com os valores do Ministério de Jovens Legacy;</li>
-            <li>Não portar substâncias ilícitas, bebidas alcoólicas ou qualquer item proibido pelo regulamento do camp;</li>
-            <li>Zelar pelo espaço físico, pelos bens do local e pelos demais participantes.</li>
+            <li>
+              Seguir todas as orientações da equipe organizadora e de segurança;
+            </li>
+            <li>
+              Manter comportamento respeitoso e compatível com os valores do
+              Ministério de Jovens Legacy;
+            </li>
+            <li>
+              Não portar substâncias ilícitas, bebidas alcoólicas ou qualquer
+              item proibido pelo regulamento do camp;
+            </li>
+            <li>
+              Zelar pelo espaço físico, pelos bens do local e pelos demais
+              participantes.
+            </li>
           </ul>
-          <p>A violação das normas poderá resultar em advertência ou até mesmo desligamento do evento, sem direito a reembolso.</p>
+          <p>
+            A violação das normas poderá resultar em advertência ou até mesmo
+            desligamento do evento, sem direito a reembolso.
+          </p>
         </div>
 
         <div class="terms-section">
           <h4>6. Uso de Imagem</h4>
-          <p>Nos termos dos artigos 11 a 21 do Código Civil Brasileiro (Lei nº 10.406/2002), da Lei de Direitos Autorais (Lei nº 9.610/1998) e do disposto no artigo 5º, incisos V, X e XXVIII da Constituição Federal, o(a) PARTICIPANTE autoriza, de forma gratuita, definitiva e irrevogável, o uso da sua imagem e voz pela ORGANIZAÇÃO, por tempo indeterminado, captadas durante a realização do evento LEGACY CAMP 2025.</p>
-          <p>Essa autorização compreende a captação, reprodução, edição e divulgação do material audiovisual ou fotográfico, total ou parcialmente, para fins institucionais, promocionais e informativos, sem que isso gere qualquer direito de remuneração ou compensação ao(a) PARTICIPANTE.</p>
-          <p>Caso o(a) PARTICIPANTE não concorde com o uso de sua imagem, deverá comunicar expressamente por escrito à organização antes do início do evento, para efeito de revogação da autorização concedida neste contrato.</p>
+          <p>
+            Nos termos dos artigos 11 a 21 do Código Civil Brasileiro (Lei nº
+            10.406/2002), da Lei de Direitos Autorais (Lei nº 9.610/1998) e do
+            disposto no artigo 5º, incisos V, X e XXVIII da Constituição
+            Federal, o(a) PARTICIPANTE autoriza, de forma gratuita, definitiva e
+            irrevogável, o uso da sua imagem e voz pela ORGANIZAÇÃO, por tempo
+            indeterminado, captadas durante a realização do evento LEGACY CAMP
+            2025.
+          </p>
+          <p>
+            Essa autorização compreende a captação, reprodução, edição e
+            divulgação do material audiovisual ou fotográfico, total ou
+            parcialmente, para fins institucionais, promocionais e informativos,
+            sem que isso gere qualquer direito de remuneração ou compensação
+            ao(a) PARTICIPANTE.
+          </p>
+          <p>
+            Caso o(a) PARTICIPANTE não concorde com o uso de sua imagem, deverá
+            comunicar expressamente por escrito à organização antes do início do
+            evento, para efeito de revogação da autorização concedida neste
+            contrato.
+          </p>
         </div>
 
         <div class="terms-section">
           <h4>7. Disposições Legais e Foro</h4>
-          <p>Este contrato é regido pelas leis brasileiras, especialmente pelo Código Civil, e demais legislações correlatas.</p>
+          <p>
+            Este contrato é regido pelas leis brasileiras, especialmente pelo
+            Código Civil, e demais legislações correlatas.
+          </p>
           <p>Os casos omissos serão deliberados pela organização.</p>
-          <p>As partes elegem o Foro da Comarca de Manaus/AM, com exclusão de qualquer outro, por mais privilegiado que seja, para dirimir eventuais controvérsias decorrentes deste instrumento.</p>
+          <p>
+            As partes elegem o Foro da Comarca de Manaus/AM, com exclusão de
+            qualquer outro, por mais privilegiado que seja, para dirimir
+            eventuais controvérsias decorrentes deste instrumento.
+          </p>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="modal-button cancel-button" (click)="closeTermsModal()">
+      <button
+        type="button"
+        class="modal-button cancel-button"
+        (click)="closeTermsModal()"
+      >
         Fechar
       </button>
-      <button type="button" class="modal-button accept-button" (click)="acceptTerms()">
+      <button
+        type="button"
+        class="modal-button accept-button"
+        (click)="acceptTerms()"
+      >
         Aceitar Termos
       </button>
     </div>

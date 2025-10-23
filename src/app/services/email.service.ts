@@ -21,6 +21,14 @@ export class EmailService {
   sendPaymentInstructions(inscricaoId: number): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/email/send-payment-instructions/${inscricaoId}`, {});
   }
+
+  sendCustomEmail(inscricaoId: number, subject: string, message: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/email/send`, {
+      inscricaoId: inscricaoId.toString(),
+      subject: subject,
+      message: message
+    });
+  }
 }
 
 

@@ -34,6 +34,18 @@ export class AdminDashboardComponent implements OnInit {
   selectedInscricoes: Set<number> = new Set();
   isSelectAllChecked: boolean = false;
 
+  // Propriedades para email personalizado
+  showCustomEmailModal: boolean = false;
+  customEmailSubject: string = '';
+  customEmailMessage: string = '';
+  customEmailInscricao: Inscricao | null = null;
+
+  // Propriedades para controle de visibilidade dos valores
+  showValues: boolean = false;
+  showApprovedValues: boolean = false;
+  showPendingValues: boolean = false;
+  showTotalValues: boolean = false;
+
   // Propriedade para acessar Math no template
   Math = Math;
 
@@ -360,6 +372,74 @@ export class AdminDashboardComponent implements OnInit {
     return cupons.sort();
   }
 
+  // Métodos para cálculo de valores
+  calcularValorInscricao(inscricao: Inscricao): number {
+    // Não considerar inscrições rejeitadas
+    if (inscricao.status === 'REJEITADO') {
+      return 0;
+    }
+
+    // Verificar se tem cupom aplicado
+    const temCupom = inscricao.couponCode && inscricao.couponCode.trim() !== '';
+    
+    if (temCupom) {
+      return 200.00; // Valor com cupom aplicado
+    }
+
+    // Valor por lote sem cupom
+    if (inscricao.registrationLot === 'lote1') {
+      return 250.00;
+    } else if (inscricao.registrationLot === 'lote2') {
+      return 300.00;
+    }
+
+    return 0; // Lote não reconhecido
+  }
+
+  getValorTotalAprovados(): number {
+    const aprovados = this.inscricoes.filter(inscricao => inscricao.status === 'APROVADO');
+    return aprovados.reduce((total, inscricao) => total + this.calcularValorInscricao(inscricao), 0);
+  }
+
+  getValorTotalPendentes(): number {
+    const pendentes = this.inscricoes.filter(inscricao => 
+      inscricao.status === 'PENDENTE' || 
+      inscricao.status === 'PARCIAL_01' || 
+      inscricao.status === 'PARCIAL_02' ||
+      inscricao.status === 'PARCIAL_03' ||
+      inscricao.status === 'PARCIAL_04'
+    );
+    return pendentes.reduce((total, inscricao) => total + this.calcularValorInscricao(inscricao), 0);
+  }
+
+  getValorTotalGeral(): number {
+    const naoRejeitados = this.inscricoes.filter(inscricao => inscricao.status !== 'REJEITADO');
+    return naoRejeitados.reduce((total, inscricao) => total + this.calcularValorInscricao(inscricao), 0);
+  }
+
+  formatarValor(valor: number): string {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(valor);
+  }
+
+  toggleShowValues(): void {
+    this.showValues = !this.showValues;
+  }
+
+  toggleShowApprovedValues(): void {
+    this.showApprovedValues = !this.showApprovedValues;
+  }
+
+  toggleShowPendingValues(): void {
+    this.showPendingValues = !this.showPendingValues;
+  }
+
+  toggleShowTotalValues(): void {
+    this.showTotalValues = !this.showTotalValues;
+  }
+
   formatarCupom(cupom: string | undefined | null): string {
     if (!cupom || cupom.trim() === '') {
       return '-';
@@ -579,6 +659,18 @@ export class AdminDashboardComponent implements OnInit {
     this.enviarEmailsEmLote('instrucoes');
   }
 
+  abrirModalEmailPersonalizadoLote(): void {
+    if (this.selectedInscricoes.size === 0) {
+      alert('Selecione pelo menos uma inscrição.');
+      return;
+    }
+
+    this.customEmailSubject = '';
+    this.customEmailMessage = '';
+    this.customEmailInscricao = null; // null indica que é envio em lote
+    this.showCustomEmailModal = true;
+  }
+
   private enviarEmailsEmLote(tipo: string): void {
     const promises = Array.from(this.selectedInscricoes).map(id => {
       switch (tipo) {
@@ -606,5 +698,72 @@ export class AdminDashboardComponent implements OnInit {
         console.error('Erro ao enviar emails em lote:', error);
         alert('Erro ao enviar alguns emails. Verifique o console para detalhes.');
       });
+  }
+
+  // Métodos para email personalizado
+  abrirModalEmailPersonalizado(inscricao: Inscricao): void {
+    this.customEmailInscricao = inscricao;
+    this.customEmailSubject = '';
+    this.customEmailMessage = '';
+    this.showCustomEmailModal = true;
+  }
+
+  fecharModalEmailPersonalizado(): void {
+    this.showCustomEmailModal = false;
+    this.customEmailInscricao = null;
+    this.customEmailSubject = '';
+    this.customEmailMessage = '';
+  }
+
+  enviarEmailPersonalizado(): void {
+    if (!this.customEmailSubject.trim()) {
+      alert('Por favor, informe o assunto do email.');
+      return;
+    }
+
+    if (!this.customEmailMessage.trim()) {
+      alert('Por favor, informe a mensagem do email.');
+      return;
+    }
+
+    // Verificar se é envio em lote ou individual
+    if (this.customEmailInscricao?.id) {
+      // Envio individual
+      this.emailService.sendCustomEmail(
+        this.customEmailInscricao.id,
+        this.customEmailSubject.trim(),
+        this.customEmailMessage.trim()
+      ).subscribe({
+        next: () => {
+          alert('Email personalizado enviado com sucesso!');
+          this.fecharModalEmailPersonalizado();
+        },
+        error: (error) => {
+          console.error('Erro ao enviar email personalizado:', error);
+          alert('Erro ao enviar email personalizado. Tente novamente.');
+        }
+      });
+    } else {
+      // Envio em lote
+      const promises = Array.from(this.selectedInscricoes).map(id => 
+        this.emailService.sendCustomEmail(
+          id,
+          this.customEmailSubject.trim(),
+          this.customEmailMessage.trim()
+        ).toPromise()
+      );
+
+      Promise.all(promises)
+        .then(() => {
+          alert(`${this.selectedInscricoes.size} emails personalizados enviados com sucesso!`);
+          this.fecharModalEmailPersonalizado();
+          this.selectedInscricoes.clear();
+          this.isSelectAllChecked = false;
+        })
+        .catch(error => {
+          console.error('Erro ao enviar emails personalizados em lote:', error);
+          alert('Erro ao enviar alguns emails personalizados. Verifique o console para detalhes.');
+        });
+    }
   }
 }

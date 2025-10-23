@@ -71,6 +71,58 @@
       </div>
     </div>
 
+    <!-- Cards de Valores -->
+    <div class="dashboard-stats value-stats">
+      <div class="stat-card value-card approved">
+        <div class="value-card-header">
+          <h3>💰 Valores Aprovados</h3>
+          <button 
+            class="toggle-value-btn"
+            (click)="toggleShowApprovedValues()"
+            [title]="showApprovedValues ? 'Ocultar valor' : 'Mostrar valor'"
+          >
+            {{ showApprovedValues ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        <p class="stat-number">
+          {{ showApprovedValues ? formatarValor(getValorTotalAprovados()) : '••••••••' }}
+        </p>
+        <small>Valores já recebidos</small>
+      </div>
+      <div class="stat-card value-card pending">
+        <div class="value-card-header">
+          <h3>⏳ Valores Pendentes</h3>
+          <button 
+            class="toggle-value-btn"
+            (click)="toggleShowPendingValues()"
+            [title]="showPendingValues ? 'Ocultar valor' : 'Mostrar valor'"
+          >
+            {{ showPendingValues ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        <p class="stat-number">
+          {{ showPendingValues ? formatarValor(getValorTotalPendentes()) : '••••••••' }}
+        </p>
+        <small>Valores a receber</small>
+      </div>
+      <div class="stat-card value-card total">
+        <div class="value-card-header">
+          <h3>📊 Valor Total</h3>
+          <button 
+            class="toggle-value-btn"
+            (click)="toggleShowTotalValues()"
+            [title]="showTotalValues ? 'Ocultar valor' : 'Mostrar valor'"
+          >
+            {{ showTotalValues ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        <p class="stat-number">
+          {{ showTotalValues ? formatarValor(getValorTotalGeral()) : '••••••••' }}
+        </p>
+        <small>Total geral (sem rejeitados)</small>
+      </div>
+    </div>
+
     <div class="filters-section">
       <div class="search-box">
         <input
@@ -290,6 +342,13 @@
                       >
                         💳 Envio de Instrução de Pagamento
                       </button>
+                      <button
+                        class="email-dropdown-item custom-email-item"
+                        (click)="abrirModalEmailPersonalizado(inscricao)"
+                        title="Enviar email personalizado"
+                      >
+                        ✉️ Email Personalizado
+                      </button>
                     </div>
                   </div>
 
@@ -336,6 +395,13 @@
               title="Enviar instruções de pagamento para selecionados"
             >
               💳 Enviar Instruções
+            </button>
+            <button
+              class="bulk-email-btn custom-btn"
+              (click)="abrirModalEmailPersonalizadoLote()"
+              title="Enviar email personalizado para selecionados"
+            >
+              ✉️ Email Personalizado
             </button>
           </div>
         </div>
@@ -574,6 +640,73 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Email Personalizado -->
+<div
+  *ngIf="showCustomEmailModal"
+  class="modal-overlay"
+  (click)="fecharModalEmailPersonalizado()"
+>
+  <div class="modal-content email-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Email Personalizado</h2>
+      <button class="close-button" (click)="fecharModalEmailPersonalizado()">×</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="email-info">
+        <h3 *ngIf="customEmailInscricao">Enviando para:</h3>
+        <h3 *ngIf="!customEmailInscricao">Enviando em lote para:</h3>
+        <p *ngIf="customEmailInscricao"><strong>Nome:</strong> {{ customEmailInscricao.fullName }}</p>
+        <p *ngIf="customEmailInscricao"><strong>Email:</strong> {{ customEmailInscricao.email }}</p>
+        <p *ngIf="!customEmailInscricao"><strong>{{ selectedCount }} inscrição(ões) selecionada(s)</strong></p>
+      </div>
+      
+      <div class="email-form">
+        <div class="form-group">
+          <label for="emailSubject">Assunto:</label>
+          <input
+            type="text"
+            id="emailSubject"
+            [(ngModel)]="customEmailSubject"
+            placeholder="Digite o assunto do email..."
+            class="form-input"
+            maxlength="200"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="emailMessage">Mensagem:</label>
+          <textarea
+            id="emailMessage"
+            [(ngModel)]="customEmailMessage"
+            placeholder="Digite a mensagem do email..."
+            class="form-textarea"
+            rows="4"
+            maxlength="2000"
+          ></textarea>
+          <div class="char-count">{{ customEmailMessage.length }}/2000 caracteres</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button
+        class="cancel-button"
+        (click)="fecharModalEmailPersonalizado()"
+      >
+        Cancelar
+      </button>
+      <button
+        class="send-button"
+        (click)="enviarEmailPersonalizado()"
+        [disabled]="!customEmailSubject.trim() || !customEmailMessage.trim()"
+      >
+        📧 Enviar Email
+      </button>
     </div>
   </div>
 </div>
