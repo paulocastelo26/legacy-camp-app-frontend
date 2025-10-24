@@ -284,6 +284,12 @@ export class AdminDashboardComponent implements OnInit {
       case 'PARCIAL_02': return 'status-parcial-02';
       case 'PARCIAL_03': return 'status-parcial-03';
       case 'PARCIAL_04': return 'status-parcial-04';
+      case 'PARCIAL_05': return 'status-parcial-05';
+      case 'PARCIAL_06': return 'status-parcial-06';
+      case 'PARCIAL_07': return 'status-parcial-07';
+      case 'PARCIAL_08': return 'status-parcial-08';
+      case 'PARCIAL_09': return 'status-parcial-09';
+      case 'PARCIAL_10': return 'status-parcial-10';
       case 'APROVADO': return 'status-aprovado';
       case 'REJEITADO': return 'status-rejeitado';
       default: return 'status-pendente';
@@ -299,6 +305,12 @@ export class AdminDashboardComponent implements OnInit {
         'PARCIAL_02',
         'PARCIAL_03',
         'PARCIAL_04',
+        'PARCIAL_05',
+        'PARCIAL_06',
+        'PARCIAL_07',
+        'PARCIAL_08',
+        'PARCIAL_09',
+        'PARCIAL_10',
         'APROVADO',
         'REJEITADO'
       ];
@@ -316,11 +328,39 @@ export class AdminDashboardComponent implements OnInit {
   getStatusDescription(status: string): string {
     switch (status) {
       case 'PENDENTE': return 'Aguardando análise';
-      case 'PARCIAL_01': return 'Pagou 1ª parcela do carnê';
-      case 'PARCIAL_02': return 'Pagou 2ª parcela do carnê';
+      case 'PARCIAL_01': return 'Pagou R$ 50,00 (1ª parcela do carnê)';
+      case 'PARCIAL_02': return 'Pagou R$ 75,00 (2ª parcela do carnê)';
+      case 'PARCIAL_03': return 'Pagou R$ 100,00 (3ª parcela do carnê)';
+      case 'PARCIAL_04': return 'Pagou R$ 125,00 (4ª parcela do carnê)';
+      case 'PARCIAL_05': return 'Pagou R$ 150,00 (5ª parcela do carnê)';
+      case 'PARCIAL_06': return 'Pagou R$ 175,00 (6ª parcela do carnê)';
+      case 'PARCIAL_07': return 'Pagou R$ 200,00 (7ª parcela do carnê)';
+      case 'PARCIAL_08': return 'Pagou R$ 225,00 (8ª parcela do carnê)';
+      case 'PARCIAL_09': return 'Pagou R$ 250,00 (9ª parcela do carnê)';
+      case 'PARCIAL_10': return 'Pagou R$ 275,00 (10ª parcela do carnê)';
       case 'APROVADO': return 'Pagamento completo - Aprovado';
       case 'REJEITADO': return 'Inscrição rejeitada';
       default: return 'Status desconhecido';
+    }
+  }
+
+  // Método para obter valor monetário baseado no status
+  getStatusValue(status: string): string {
+    switch (status) {
+      case 'PENDENTE': return 'Pendente';
+      case 'PARCIAL_01': return 'R$ 50,00';
+      case 'PARCIAL_02': return 'R$ 75,00';
+      case 'PARCIAL_03': return 'R$ 100,00';
+      case 'PARCIAL_04': return 'R$ 125,00';
+      case 'PARCIAL_05': return 'R$ 150,00';
+      case 'PARCIAL_06': return 'R$ 175,00';
+      case 'PARCIAL_07': return 'R$ 200,00';
+      case 'PARCIAL_08': return 'R$ 225,00';
+      case 'PARCIAL_09': return 'R$ 250,00';
+      case 'PARCIAL_10': return 'R$ 275,00';
+      case 'APROVADO': return 'Aprovado';
+      case 'REJEITADO': return 'Rejeitado';
+      default: return status;
     }
   }
 
@@ -407,7 +447,13 @@ export class AdminDashboardComponent implements OnInit {
       inscricao.status === 'PARCIAL_01' || 
       inscricao.status === 'PARCIAL_02' ||
       inscricao.status === 'PARCIAL_03' ||
-      inscricao.status === 'PARCIAL_04'
+      inscricao.status === 'PARCIAL_04' ||
+      inscricao.status === 'PARCIAL_05' ||
+      inscricao.status === 'PARCIAL_06' ||
+      inscricao.status === 'PARCIAL_07' ||
+      inscricao.status === 'PARCIAL_08' ||
+      inscricao.status === 'PARCIAL_09' ||
+      inscricao.status === 'PARCIAL_10'
     );
     return pendentes.reduce((total, inscricao) => total + this.calcularValorInscricao(inscricao), 0);
   }

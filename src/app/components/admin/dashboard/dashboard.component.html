@@ -136,10 +136,16 @@
         <select [(ngModel)]="statusFilter" class="filter-select">
           <option value="">Todos os status</option>
           <option value="PENDENTE">Pendente</option>
-          <option value="PARCIAL_01">Parcial 01</option>
-          <option value="PARCIAL_02">Parcial 02</option>
-          <option value="PARCIAL_03">Parcial 03</option>
-          <option value="PARCIAL_04">Parcial 04</option>
+          <option value="PARCIAL_01">R$ 50,00</option>
+          <option value="PARCIAL_02">R$ 75,00</option>
+          <option value="PARCIAL_03">R$ 100,00</option>
+          <option value="PARCIAL_04">R$ 125,00</option>
+          <option value="PARCIAL_05">R$ 150,00</option>
+          <option value="PARCIAL_06">R$ 175,00</option>
+          <option value="PARCIAL_07">R$ 200,00</option>
+          <option value="PARCIAL_08">R$ 225,00</option>
+          <option value="PARCIAL_09">R$ 250,00</option>
+          <option value="PARCIAL_10">R$ 275,00</option>
           <option value="APROVADO">Aprovado</option>
           <option value="REJEITADO">Rejeitado</option>
         </select>
@@ -270,7 +276,7 @@
                   class="status-badge"
                   [ngClass]="getStatusClass(inscricao.status)"
                 >
-                  {{ inscricao.status || "PENDENTE" }}
+                  {{ getStatusValue(inscricao.status || "PENDENTE") }}
                 </span>
               </td>
               <!-- <td>
@@ -310,7 +316,7 @@
                       [value]="status"
                       [selected]="status === (inscricao.status || 'PENDENTE')"
                     >
-                      {{ status }}
+                      {{ getStatusValue(status) }}
                     </option>
                   </select>
 
@@ -627,7 +633,7 @@
               class="status-badge"
               [ngClass]="getStatusClass(selectedInscricao.status)"
             >
-              {{ selectedInscricao.status || "pendente" }}
+              {{ getStatusValue(selectedInscricao.status || "PENDENTE") }}
             </span>
           </div>
           <div class="detail-item">
